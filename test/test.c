@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
 					if(tmp[i] == ']')
 					{
 						/* Controllo gradienti */
-						if (p[1] == 'c' || p[1] == 'C' || p[1] == 'a' || p[1] == 'A') {
+						if ((p[1] == 'c' || p[1] == 'C' || p[1] == 'a' || p[1] == 'A') && p[2] == '=') {
 							printf("Controllo gradienti.\n");
 							char gradiente = 0;
 							gchar *iter = p + i;
@@ -117,13 +117,20 @@ int main(int argc, char *argv[]) {
 									printf("ho trovato un finale\n");
 									if (iter[3] == '=') {
 										/*  */
+										char *initialColor = findColor(p + 3);
 										char *finalColor = findColor(iter + 4);
-										char r, g, b;
-										r = hexDec(finalColor, 2);
-										g = hexDec(finalColor + 2, 2);
-										b = hexDec(finalColor + 4, 2);
+										char ri, gi, bi,  rf, gf, bf;
+
+										printf("Colore iniziale: %s\n", initialColor);
+										ri = hexDec(initialColor, 2);
+										gi = hexDec(initialColor + 2, 2);
+										bi = hexDec(initialColor + 4, 2);
 										
-										printf("Colore finale: %s\n", findColor(iter + 4));
+										printf("Colore finale: %s\n", finalColor);
+										rf = hexDec(finalColor, 2);
+										gf = hexDec(finalColor + 2, 2);
+										bf = hexDec(finalColor + 4, 2);
+
 										gradiente = 1;
 										printf("gradiente\n");
 									}
