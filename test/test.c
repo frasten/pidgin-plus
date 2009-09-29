@@ -30,6 +30,34 @@ static char *findColor(char *str) {
 	return color;
 }
 
+static int hexDec(char *str, char size) {
+	printf("Sono in hedDex(%c%c).\n",str[0],str[1]);
+	// todo: controlla maiuscole
+	int i, j, tot = 0;
+	for (i = size - 1; i>=0; i--) {
+		int digit = 0, uppercase = 0;
+		// uppercase ?
+		if (str[i] >= 'A' && str[i] <= 'F') {
+			uppercase = 32;
+		}
+		
+		if (str[i] >= '0' && str[i] <= '9')
+			digit = str[i] - '0';
+		else if ((str[i] >= 'a' && str[i] <= 'f') ||
+			(str[i] >= 'A' && str[i] <= 'F'))
+			digit = str[i] - 'a' + 10 + uppercase;
+
+		// Esponente
+		for (j = 0;j < size - (i + 1);j++) {
+			digit *= 16;
+		}
+//		printf("Da destra: %i\n",digit);
+		tot += digit;
+	}
+	printf("Totale: %i\n", tot);
+	return tot;
+}
+
 
 static char *convert_tag(const char *ptag)
 {
@@ -89,6 +117,12 @@ int main(int argc, char *argv[]) {
 									printf("ho trovato un finale\n");
 									if (iter[3] == '=') {
 										/*  */
+										char *finalColor = findColor(iter + 4);
+										char r, g, b;
+										r = hexDec(finalColor, 2);
+										g = hexDec(finalColor + 2, 2);
+										b = hexDec(finalColor + 4, 2);
+										
 										printf("Colore finale: %s\n", findColor(iter + 4));
 										gradiente = 1;
 										printf("gradiente\n");
@@ -97,6 +131,8 @@ int main(int argc, char *argv[]) {
 										printf("non gradiente\n");
 										break;
 									}
+									printf("esco\n");
+									return;
 								}
 							}
 						}
