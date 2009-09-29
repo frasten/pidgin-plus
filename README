@@ -1,0 +1,7 @@
+To initialize the code, run:
+  ./autogen.sh --prefix=/usr
+
+Then, to compile and install it:
+  make
+and as root:
+  make install
