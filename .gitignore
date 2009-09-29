@@ -1,6 +1,8 @@
 INSTALL
 Makefile
 *.in
+*.la
+*.lo
 aclocal.m4
 autom4te.cache/
 config.guess
@@ -14,5 +16,6 @@ install-sh
 libtool
 ltmain.sh
 missing
-plus/.deps/
+.deps
+.libs
 stamp-h1
