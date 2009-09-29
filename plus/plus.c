@@ -54,8 +54,8 @@ const char * colorCodes[] = {
 "980299","01038c","01885f","389600","9a9e15","473400","4d0000","5f0162",
 "000047","06502f","1c5300","544d05"};
 
-// converts a Plus! tag to a Pango markup tag
-// tag must not contains trailing [ and ]
+/* converts a Plus! tag to a Pango markup tag
+ * tag must not contains trailing [ and ] */
 static char *convert_tag(const char *ptag)
 {
 	char *buf = g_malloc0(100);
@@ -87,17 +87,17 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 	char * ret = NULL;
 	purple_debug_misc("plusblist","Screename is \"%s\", server alias is \"%s\"\n",buddy->name,buddy->server_alias);
 
-	// do not apply colorization on user-aliased names
+	/* do not apply colorization on user-aliased names */
 	if (buddy->alias != NULL) return NULL;
 
 	gboolean setting = purple_blist_node_get_bool(&buddy->node, "disable_plus");
 	if(!setting)
 	{
 		GString *buf = g_string_new("");
-		// get an escaped version of the alias
+		/* get an escaped version of the alias */
 		char *esc = g_markup_escape_text(buddy->server_alias,-1);
 		purple_debug_misc("plusblist","Parsing tags to \"%s\"\n",esc);
-		if(!esc) return NULL;	// oops...
+		if(!esc) return NULL;	/* oops... */
 		char *p = esc,*conv = NULL,*tmp = NULL;
 		int i;
 		for(;*p;p++)
@@ -115,18 +115,19 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 						conv = convert_tag(tmp+1);
 						if(conv)
 						{
-							// tmp = [c=38 len = 5
-							// tmp+1 = c=38 len = 4
-							// [c=38]Daniele
+							/* tmp = [c=38 len = 5
+							 * tmp+1 = c=38 len = 4
+							 * [c=38]Daniele
+							 */
 							purple_debug_misc("plusblist","Conversion done! \"%s\"\n",conv);
 							g_string_append(buf,conv);
-							p += strlen(tmp+1)+1;	// avanza della lunghezza del tag +2 ([,])
+							p += strlen(tmp+1)+1;	/* avanza della lunghezza del tag +2 ([,]) */
 						}
 						break;
 					}
 				}
 				g_free(tmp);
-				// add normally...
+				/* add normally... */
 				if(!conv) g_string_append_c(buf,*p);
 				conv = NULL;
 			}
@@ -138,12 +139,12 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 		purple_debug_misc("plusblist","Return value will be \"%s\"\n",ret);
 		if(!pango_parse_markup(ret,-1,0,NULL,NULL,NULL,NULL))
 		{
-			// parse failed!
+			/* parse failed! */
 			g_free(ret);
 			ret = NULL;
 		}
 	}
-	//g_debug("PLUS! -----------------------");
+	/*g_debug("PLUS! -----------------------"); */
 	return ret;
 }
 
@@ -231,8 +232,9 @@ plugin_load(PurplePlugin *plugin)
 static gboolean
 plugin_unload(PurplePlugin *plugin)
 {
-	// a quanto pare pidgin disconnette da soli i segnali... boh! :S
-	//purple_signal_disconnect(pidgin_blist_get_handle(),"drawing-buddy",plugin,PURPLE_CALLBACK(plus_nick_changed_cb));
+	/* a quanto pare pidgin disconnette da soli i segnali... boh! :S
+	 * purple_signal_disconnect(pidgin_blist_get_handle(),"drawing-buddy",plugin,PURPLE_CALLBACK(plus_nick_changed_cb));
+	 */
 	purple_timeout_add(100,(GSourceFunc)first_launch,NULL);
 	return TRUE;
 }
@@ -273,9 +275,10 @@ static PurplePluginInfo info =
 
 static void
 init_plugin(PurplePlugin *plugin) {
-	//info.name = "Plus! color tags";
-	//info.summary = "Support for Plus! color tags.";
-	//info.description = "Parses server aliases for Plus! Live Messenger color tags.\nParsing can be deactivated on a per-nick basis.";
+	/*info.name = "Plus! color tags";
+		info.summary = "Support for Plus! color tags.";
+		info.description = "Parses server aliases for Plus! Live Messenger color tags.\nParsing can be deactivated on a per-nick basis.";
+	*/
 }
 
 PURPLE_INIT_PLUGIN(plus, init_plugin, info)
