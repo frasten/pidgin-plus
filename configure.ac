@@ -1,4 +1,4 @@
-AC_INIT([pidgin-plus], [0.0.2], [daniele.athome@gmail.com])
+AC_INIT([pidgin-plus], [0.1.0], [daniele.athome@gmail.com])
 AC_CANONICAL_SYSTEM
 AM_CONFIG_HEADER(config.h)
 

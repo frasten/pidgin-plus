@@ -114,7 +114,7 @@ static int hexDec(char *str, char size) {
 	int i, j, tot = 0;
 	for (i = size - 1; i>=0; i--) {
 		int digit = 0, uppercase = 0;
-		// uppercase ?
+		/* uppercase ? */
 		if (str[i] >= 'A' && str[i] <= 'F') {
 			uppercase = 32;
 		}
@@ -125,7 +125,7 @@ static int hexDec(char *str, char size) {
 			(str[i] >= 'A' && str[i] <= 'F'))
 			digit = str[i] - 'a' + 10 + uppercase;
 
-		// Esponente
+		/* Esponente */
 		for (j = 0;j < size - (i + 1);j++) {
 			digit *= 16;
 		}
@@ -191,7 +191,7 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 							tagCharUpperCase = 'A';
 						}
 						else {
-							// sarebbe carino fargli skippare la parte di controllo gradiente
+							/* sarebbe carino fargli skippare la parte di controllo gradiente */
 						}
 
 						if ((p[1] == tagCharLowerCase || p[1] == tagCharUpperCase) && p[2] == '=') {
@@ -252,17 +252,17 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 											gradientIndexBG = 0;
 											purple_debug_misc("plusblist", "Number of chars inside the gradient: %i\n", ncharsBG);
 										}
-										// Calcolare il numero di caratteri effettivi (escludendo i tag),
-										// e suddividere il Delta R, G, B diviso il numero di caratteri,
-										// ottenendo l'incremento da aggiungere (o sottrarre)
-										// ad ogni carattere.
-										// Subito PRIMA dell'ultimo carattere, mettere il colore finale.
-
+										/* Calcolare il numero di caratteri effettivi (escludendo i tag),
+										 * e suddividere il Delta R, G, B diviso il numero di caratteri,
+										 * ottenendo l'incremento da aggiungere (o sottrarre)
+										 * ad ogni carattere.
+										 * Subito PRIMA dell'ultimo carattere, mettere il colore finale.
+										 */
 									}
 									break;
 								}
 								else {
-									if (tagCharLowerCase == 'c') ncharsFG++; // TODO: devono essere effettivi, non cosi'.
+									if (tagCharLowerCase == 'c') ncharsFG++;
 									else ncharsBG++;
 
 								}
