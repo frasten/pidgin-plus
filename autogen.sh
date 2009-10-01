@@ -1,6 +1,6 @@
 #!/bin/sh
 autoreconf -f -i
 
-if [ $NOCONFIGURE ]; then
+if [ !"$NOCONFIGURE" ]; then
 	./configure $@
 fi
