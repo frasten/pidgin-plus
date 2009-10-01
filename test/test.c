@@ -1,5 +1,7 @@
 /* Non vanno correttamente:
  * ./test [c=1]abc[u]ds[/u]adsa[/c=0] (nchar sbagliato)
+ * ./test [c=1]a[ss[u]dasd[/c]
+ * ./test [c=1]a[bc[/c] (beh, e' malformata forte...)
  * */
 
 #include <glib.h>
@@ -145,8 +147,11 @@ int main(int argc, char *argv[]) {
 
 						gchar *iter = p + i + 1;
 
+						char insideTagFastForward = FALSE;
+						int fastForwardCharCounter = 0;
 						/* Vado avanti e cerco il finale corrispondente */
 						for (;*iter;*iter++) {
+
 							if (iter[0] == '[' && iter[1] == '/' &&
 								(iter[2] == tagCharLowerCase || iter[2] == tagCharUpperCase)
 							) {
@@ -205,7 +210,26 @@ int main(int argc, char *argv[]) {
 							else {
 								if (tagCharLowerCase == 'c') ncharsFG++; // TODO: devono essere effettivi, non cosi'.
 								else ncharsBG++;
+
 							}
+
+							if (iter[0] == '[') {
+								/* sono FORSE all'interno di un tag*/
+								insideTagFastForward = TRUE; /* TODO: non e' vero, limite massimo caratteri */
+								fastForwardCharCounter = 0;
+							}
+							else if (iter[0] == ']' && insideTagFastForward) {
+								/* ero all'interno di un tag ed ora l'ho chiuso */
+								insideTagFastForward = FALSE;
+								if (tagCharLowerCase == 'c')
+									ncharsFG -= (fastForwardCharCounter + 2); /* 2 = squares []*/
+								else
+									ncharsBG -=  (fastForwardCharCounter + 2); /* 2 = squares []*/
+							}
+							else if (insideTagFastForward) {
+								fastForwardCharCounter++;
+							}
+
 						}
 					} /* fine controllo gradiente */
 
