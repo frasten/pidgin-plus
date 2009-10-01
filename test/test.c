@@ -1,10 +1,5 @@
 /* Non vanno correttamente:
- * ./test [a=1]abcdsadsa[/a] (non gestisco il gradiente su BG)
- * ./test [a=1][c=0]abcdsadsa[/c=1][/a] (non gestisco il gradiente su BG)
  * ./test [c=1]abc[u]ds[/u]adsa[/c=0] (nchar sbagliato)
- * 
- * New branch:
- * ./test [c=1]asd[/c=2] => crash
  * */
 
 #include <glib.h>
@@ -200,7 +195,7 @@ int main(int argc, char *argv[]) {
 									// ad ogni carattere.
 									// Subito PRIMA dell'ultimo carattere, mettere il colore finale.
 
-									
+
 									printf("gradiente\n");
 								}
 								else {
@@ -251,7 +246,7 @@ int main(int argc, char *argv[]) {
 		if (!insideTag) {
 			if (gradientFG || gradientBG) {
 				/* TODO: aggiungo i caratteri colorati del gradiente */
-				
+
 				int j;
 				int color[3];
 				char *fgAttribute = NULL, *bgAttribute = NULL;
@@ -284,7 +279,7 @@ int main(int argc, char *argv[]) {
 				char *tag = g_strdup_printf("<span%s%s>%c</span>", fgAttribute, bgAttribute, p[0]);
 				g_free(fgAttribute);
 				g_free(bgAttribute);
-				
+
 				g_string_append(buf, tag);
 				g_free(tag);
 				if (gradientFG) gradientIndexFG++;
