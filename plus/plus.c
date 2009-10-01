@@ -124,10 +124,8 @@ static int hexDec(char *str, char size) {
 			(str[i] >= 'A' && str[i] <= 'F'))
 			digit = str[i] - 'a' + 10 + uppercase;
 
-		/* Esponente */
-		for (j = 0;j < size - (i + 1);j++) {
-			digit *= 16;
-		}
+		// Power: digit *= pow(16, size - i - 1);
+		digit *= (1<<((size - i -  1) << 2));
 
 		tot += digit;
 	}
