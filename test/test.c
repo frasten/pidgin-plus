@@ -97,6 +97,7 @@ static int hexDec(char *str, char size) {
 
 int main(int argc, char *argv[]) {
 	char * p = strdup(argv[1]);
+
 	int gradientIndexFG, gradientIndexBG, ncharsFG, ncharsBG;
 	int begColorFG[3], endColorFG[3], deltaColorFG[3];
 	int begColorBG[3], endColorBG[3], deltaColorBG[3];

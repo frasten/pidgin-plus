@@ -56,6 +56,25 @@ const char * colorCodes[] = {
 "980299","01038c","01885f","389600","9a9e15","473400","4d0000","5f0162",
 "000047","06502f","1c5300","544d05"};
 
+/* Finds the color associated to a color code, and also reads colors in
+ * #RRGGBB format. */
+static char *findColor(char *str) {
+	int index;
+	char *p = str;
+	char *color = NULL;
+	if (*p == '#') {
+		color = (p+1);
+	}
+	else {
+		index = atoi(p);
+		if (index >= sizeof(colorCodes) / sizeof(colorCodes[0]))
+			return NULL;
+		color = (char *)colorCodes[index];
+	}
+
+	return g_strdup(color);
+}
+
 /* converts a Plus! tag to a Pango markup tag
  * tag must not contains trailing [ and ] */
 static char *convert_tag(const char *ptag)
@@ -75,13 +94,46 @@ static char *convert_tag(const char *ptag)
 	if(*++p == '=')
 	{
 		p++;
-		if(*p == '#') color = (p+1);
-		else color = (char *)colorCodes[atoi(p)];
+		color = findColor(p);
 		if(*ptag == 'c' || *ptag == 'C') pretag = "foreground";
 		if(*ptag == 'a' || *ptag == 'A') pretag = "background";
-		if(pretag) return g_strdup_printf("<span %s=\"#%s\">",pretag,color);
+		if(pretag) {
+			char *tmp = g_strdup_printf("<span %s=\"#%s\">", pretag, color);
+			g_free(color);
+			return tmp;
+		}
 	}
 	return NULL;
+}
+
+/* Converts an hexadecimal string into a decimal integer.
+ * @param str: the hex string
+ * @param size: only parse the first n chars.
+ * */
+static int hexDec(char *str, char size) {
+	int i, j, tot = 0;
+	for (i = size - 1; i>=0; i--) {
+		int digit = 0, uppercase = 0;
+		// uppercase ?
+		if (str[i] >= 'A' && str[i] <= 'F') {
+			uppercase = 32;
+		}
+
+		if (str[i] >= '0' && str[i] <= '9')
+			digit = str[i] - '0';
+		else if ((str[i] >= 'a' && str[i] <= 'f') ||
+			(str[i] >= 'A' && str[i] <= 'F'))
+			digit = str[i] - 'a' + 10 + uppercase;
+
+		// Esponente
+		for (j = 0;j < size - (i + 1);j++) {
+			digit *= 16;
+		}
+//		printf("Da destra: %i\n",digit);
+		tot += digit;
+	}
+	printf("Totale: %s => %i\n", str, tot);
+	return tot;
 }
 
 static char *plus_nick_changed_cb(PurpleBuddy *buddy)
@@ -89,53 +141,245 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 	char * ret = NULL;
 	purple_debug_misc("plusblist","Screename is \"%s\", server alias is \"%s\"\n",buddy->name,buddy->server_alias);
 
-	/* do not apply colorization on user-aliased names */
-	if (buddy->alias != NULL) return NULL;
-
 	gboolean setting = purple_blist_node_get_bool(&buddy->node, "disable_plus");
 	if(!setting)
 	{
-		GString *buf = g_string_new("");
 		/* get an escaped version of the alias */
-		char *esc = g_markup_escape_text(buddy->server_alias,-1);
+		char *esc;
+
+		/* Colorization on alias, if set. */
+		if (buddy->alias != NULL)
+			esc = g_markup_escape_text(buddy->alias, -1);
+		else
+			esc = g_markup_escape_text(buddy->server_alias,-1);
+
 		purple_debug_misc("plusblist","Parsing tags to \"%s\"\n",esc);
 		if(!esc) return NULL;	/* oops... */
-		char *p = esc,*conv = NULL,*tmp = NULL;
-		int i;
-		for(;*p;p++)
-		{
-			purple_debug_misc("plusblist","Pointer now points to \"%s\"\n",p);
-			if(*p == '[')
-			{
-				tmp = g_strdup(p);
-				for(i=0;i<12;i++)
-				{
-					if(tmp[i] == ']')
-					{
-						tmp[i] = '\0';
-						purple_debug_misc("plusblist","Converting tag \"%s\"\n",tmp+1);
-						conv = convert_tag(tmp+1);
-						if(conv)
-						{
-							/* tmp = [c=38 len = 5
-							 * tmp+1 = c=38 len = 4
-							 * [c=38]Daniele
-							 */
-							purple_debug_misc("plusblist","Conversion done! \"%s\"\n",conv);
-							g_string_append(buf,conv);
-							p += strlen(tmp+1)+1;	/* avanza della lunghezza del tag +2 ([,]) */
+
+		int gradientIndexFG, gradientIndexBG, ncharsFG, ncharsBG;
+		int begColorFG[3], endColorFG[3], deltaColorFG[3];
+		int begColorBG[3], endColorBG[3], deltaColorBG[3];
+		unsigned char gradientBG = FALSE, gradientFG = FALSE, insideTag = FALSE;
+		char *p = esc;
+
+		/* Ciclo di lettura caratteri */
+		GString *buf = g_string_new("");
+		for (;*p;p++) {
+			// printf("Leggo il carattere %c\n", *p);
+			if (*p == '[') {
+				/* Controllo tag */
+
+				/* Faccio un fast forward per cercare il corrispondente ],
+				 * determinando quindi se si tratta di un tag oppure no. */
+				int i;
+				for(i = 1; i < 12; i++) {
+					if (p[i] == ']') {
+						char *replace;
+						char gradientTag = FALSE;
+
+						/* Ho trovato la fine del tag, sono dentro! */
+						insideTag = TRUE;
+						printf("Primo carattere del tag: %c\n", p[1]);
+
+						/* Controllo gradiente */
+
+						/* Try to unificate c/a*/
+						char tagCharLowerCase, tagCharUpperCase;
+						if (p[1] == 'c' || p[1] == 'C') {
+							tagCharLowerCase = 'c';
+							tagCharUpperCase = 'C';
 						}
-						break;
-					}
-				}
-				g_free(tmp);
-				/* add normally... */
-				if(!conv) g_string_append_c(buf,*p);
-				conv = NULL;
+						else if (p[1] == 'a' || p[1] == 'A') {
+							tagCharLowerCase = 'a';
+							tagCharUpperCase = 'A';
+						}
+						else {
+							// sarebbe carino fargli skippare la parte di controllo gradiente
+						}
+
+						if ((p[1] == tagCharLowerCase || p[1] == tagCharUpperCase) && p[2] == '=') {
+							printf("Controllo gradienti.\n");
+							if (tagCharLowerCase == 'c') {
+								gradientFG = FALSE; /* TODO: necessario? */
+								ncharsFG = 0;
+							}
+							else {
+								gradientBG = FALSE; /* TODO: necessario? */
+								ncharsBG = 0;
+							}
+
+							gchar *iter = p + i + 1;
+
+							char insideTagFastForward = FALSE;
+							int fastForwardCharCounter = 0;
+							/* Vado avanti e cerco il finale corrispondente */
+							for (;*iter;*iter++) {
+
+								if (iter[0] == '[' && iter[1] == '/' &&
+									(iter[2] == tagCharLowerCase || iter[2] == tagCharUpperCase)
+								) {
+									printf("ho trovato un finale\n");
+									if (iter[3] == '=') {
+										gradientTag = TRUE;
+										/*  */
+										char *initialColor = findColor(p + 3);
+										char *finalColor = findColor(iter + 4);
+										if (!initialColor || !finalColor) break;
+
+										printf("Colore iniziale: %s\n", initialColor);
+
+										int j;
+										for (j = 0;j <= 2;j++) {
+											if (tagCharLowerCase == 'c') {
+												begColorFG[j] = hexDec(initialColor + 2 * j, 2);
+												endColorFG[j] = hexDec(finalColor + 2 * j, 2);
+												deltaColorFG[j] = endColorFG[j] - begColorFG[j];
+											}
+											else {
+												begColorBG[j] = hexDec(initialColor + 2 * j, 2);
+												endColorBG[j] = hexDec(finalColor + 2 * j, 2);
+												deltaColorBG[j] = endColorBG[j] - begColorBG[j];
+											}
+										}
+
+										printf("Colore finale: %s\n", finalColor);
+										g_free(initialColor);
+										g_free(finalColor);
+
+										if (tagCharLowerCase == 'c') {
+											gradientFG = TRUE;
+											gradientIndexFG = 0;
+											printf("numero caratteri: %i\n", ncharsFG);
+										}
+										else {
+											gradientBG = TRUE;
+											gradientIndexBG = 0;
+											printf("numero caratteri: %i\n", ncharsBG);
+										}
+										// Calcolare il numero di caratteri effettivi (escludendo i tag),
+										// e suddividere il Delta R, G, B diviso il numero di caratteri,
+										// ottenendo l'incremento da aggiungere (o sottrarre)
+										// ad ogni carattere.
+										// Subito PRIMA dell'ultimo carattere, mettere il colore finale.
+
+
+										printf("gradiente\n");
+									}
+									else {
+										printf("non gradiente\n");
+									}
+									break;
+								}
+								else {
+									if (tagCharLowerCase == 'c') ncharsFG++; // TODO: devono essere effettivi, non cosi'.
+									else ncharsBG++;
+
+								}
+
+								if (iter[0] == '[') {
+									/* sono FORSE all'interno di un tag*/
+									insideTagFastForward = TRUE; /* TODO: non e' vero, limite massimo caratteri */
+									fastForwardCharCounter = 0;
+								}
+								else if (iter[0] == ']' && insideTagFastForward) {
+									/* ero all'interno di un tag ed ora l'ho chiuso */
+									insideTagFastForward = FALSE;
+									if (tagCharLowerCase == 'c')
+										ncharsFG -= (fastForwardCharCounter + 2); /* 2 = squares []*/
+									else
+										ncharsBG -=  (fastForwardCharCounter + 2); /* 2 = squares []*/
+								}
+								else if (insideTagFastForward) {
+									fastForwardCharCounter++;
+								}
+
+							}
+						} /* fine controllo gradiente */
+
+						/* Non devo tradurre il tag di fine gradiente: */
+						if (p[1] == '/' && p[3] == '=') {
+							gradientTag = TRUE;
+							if (tagCharLowerCase == 'c')
+								gradientFG = FALSE;
+							else
+								gradientBG = FALSE;
+						}
+
+						/* Tag convertito ed aggiunto solo se non sono in un gradiente.
+						 * Infatti in questo caso viene gestito dopo. */
+						if (!gradientTag) {
+							printf("Provo il tag %s\n", g_strndup(p + 1, i - 1));
+							replace = convert_tag(g_strndup(p + 1, i - 1));
+							if (replace) {
+								g_string_append(buf, replace);
+							}
+							g_free(replace);
+						}
+						break; /* Ne ho trovata una, non cerco le seguenti. */
+					} /* Fine if p = ] */
+				} /* Fine ciclo for per cercare la fine del tag ] */
+
+
+
+
+
 			}
-			else g_string_append_c(buf,*p);
-			purple_debug_misc("plusblist","String value is \"%s\"\n",buf->str);
+			else if (*p == ']' && insideTag) {
+				insideTag = FALSE;
+				continue; /* TODO: e' ok? */
+			}
+
+			if (!insideTag) {
+				if (gradientFG || gradientBG) {
+					/* Aggiungo i caratteri colorati del gradiente */
+
+					int j;
+					int color[3];
+					char *fgAttribute = NULL, *bgAttribute = NULL;
+					if (gradientFG) {
+						for (j = 0; j <= 2; j++) {
+							int delta = 0;
+							if (ncharsFG > 1)
+								delta = deltaColorFG[j] * gradientIndexFG / (ncharsFG - 1);
+							color[j] = begColorFG[j] + delta;
+	//					printf("Deltacolor: %i; delta=%i; color[%i]=%i\n", deltaColor[j], delta, j, color[j]);
+	//					printf("delta[%i] = %i\n", j, delta);
+						}
+						fgAttribute = g_strdup_printf(" foreground=\"#%02x%02x%02x\"", color[0], color[1], color[2]);
+					}
+					else fgAttribute = g_strdup("");
+
+					if (gradientBG) {
+						for (j = 0; j <= 2; j++) {
+							int delta = 0;
+							if (ncharsBG > 1)
+								delta = deltaColorBG[j] * gradientIndexBG / (ncharsBG - 1);
+							color[j] = begColorBG[j] + delta;
+	//					printf("Deltacolor: %i; delta=%i; color[%i]=%i\n", deltaColor[j], delta, j, color[j]);
+	//					printf("delta[%i] = %i\n", j, delta);
+						}
+						bgAttribute = g_strdup_printf(" background=\"#%02x%02x%02x\"", color[0], color[1], color[2]);
+					}
+					else bgAttribute = g_strdup("");
+
+					char *tag = g_strdup_printf("<span%s%s>%c</span>", fgAttribute, bgAttribute, p[0]);
+					g_free(fgAttribute);
+					g_free(bgAttribute);
+
+					g_string_append(buf, tag);
+					g_free(tag);
+					if (gradientFG) gradientIndexFG++;
+					if (gradientBG) gradientIndexBG++;
+				}
+				else {
+					/* Carattere normale, senza essere in un gradiente */
+					g_string_append_c(buf, p[0]);
+				}
+			}
 		}
+		/* Finito, restituisco buf */
+		/* TODO: return */
+		printf("Risultato finale: %s\n", buf->str);
 		g_free(esc);
 		ret = g_string_free(buf,FALSE);
 		purple_debug_misc("plusblist","Return value will be \"%s\"\n",ret);
