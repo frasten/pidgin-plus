@@ -2,8 +2,6 @@
  * ./test [a=1]abcdsadsa[/a] (non gestisco il gradiente su BG)
  * ./test [a=1][c=0]abcdsadsa[/c=1][/a] (non gestisco il gradiente su BG)
  * ./test [c=1]abc[u]ds[/u]adsa[/c=0] (nchar sbagliato)
- * ./test [c=0]abcdsadsa[/c=1] (nota DeltaColor: lo sbaglia, forse no, è negativo.)
- *                             MA: non finisce a 000000, ma a ff1d1d -_-
  * ./test [c=#000000]abcdsadsa[/c=111111] (forse è sbagliato, ma non dovrebbe segfaultare)
  * ./test [c=#000000]abcdsadsa[/c=#111111] (mette numeri a caso...)
  * controllare la funzione della proporzione che per me è sbagliata
@@ -67,8 +65,6 @@ static char *convert_tag(const char *ptag)
 }
 
 static int hexDec(char *str, char size) {
-	// printf("Sono in hedDex(%c%c).\n",str[0],str[1]);
-	// todo: controlla maiuscole
 	int i, j, tot = 0;
 	for (i = size - 1; i>=0; i--) {
 		int digit = 0, uppercase = 0;
@@ -140,13 +136,14 @@ int main(int argc, char *argv[]) {
 									/*  */
 									char *initialColor = findColor(p + 3);
 									char *finalColor = findColor(iter + 4);
+									if (!initialColor || !finalColor) break;
 
 									printf("Colore iniziale: %s\n", initialColor);
 
 									int j;
 									for (j = 0;j <= 2;j++) {
-										begColor[j] = hexDec(initialColor + 2*j, 2);
-										endColor[j] = hexDec(finalColor + 2*j, 2);
+										begColor[j] = hexDec(initialColor + 2 * j, 2);
+										endColor[j] = hexDec(finalColor + 2 * j, 2);
 										deltaColor[j] = endColor[j] - begColor[j];
 									}
 
