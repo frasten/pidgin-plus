@@ -2,9 +2,7 @@
  * ./test [a=1]abcdsadsa[/a] (non gestisco il gradiente su BG)
  * ./test [a=1][c=0]abcdsadsa[/c=1][/a] (non gestisco il gradiente su BG)
  * ./test [c=1]abc[u]ds[/u]adsa[/c=0] (nchar sbagliato)
- * ./test [c=#000000]abcdsadsa[/c=111111] (forse è sbagliato, ma non dovrebbe segfaultare)
  * ./test [c=#000000]abcdsadsa[/c=#111111] (mette numeri a caso...)
- * controllare la funzione della proporzione che per me è sbagliata
  * */
 
 #include <glib.h>
@@ -72,7 +70,7 @@ static int hexDec(char *str, char size) {
 		if (str[i] >= 'A' && str[i] <= 'F') {
 			uppercase = 32;
 		}
-		
+
 		if (str[i] >= '0' && str[i] <= '9')
 			digit = str[i] - '0';
 		else if ((str[i] >= 'a' && str[i] <= 'f') ||
@@ -170,7 +168,7 @@ int main(int argc, char *argv[]) {
 							}
 						}
 					} /* fine controllo gradiente */
-					
+
 					/* Non devo tradurre il tag di fine gradiente: */
 					if (p[1] == '/' && p[3] == '=') {
 						gradientTag = TRUE;
@@ -215,7 +213,7 @@ int main(int argc, char *argv[]) {
 //					printf("Deltacolor: %i; delta=%i; color[%i]=%i\n", deltaColor[j], delta, j, color[j]);
 //					printf("delta[%i] = %i\n", j, delta);
 				}
-				
+
 				char *tag = g_strdup_printf("<span foreground=\"#%02x%02x%02x\">%c</span>", color[0], color[1], color[2], p[0]);
 				g_string_append(buf, tag);
 				gradientIndex++;
