@@ -1,2 +1,6 @@
 #!/bin/sh
-autoreconf -f -i && ./configure $@
+autoreconf -f -i
+
+if [ ! $? -a ! $NOCONFIGURE ]; then
+	./configure $@
+fi
