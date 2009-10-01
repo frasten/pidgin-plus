@@ -2,6 +2,9 @@
  * ./test [a=1]abcdsadsa[/a] (non gestisco il gradiente su BG)
  * ./test [a=1][c=0]abcdsadsa[/c=1][/a] (non gestisco il gradiente su BG)
  * ./test [c=1]abc[u]ds[/u]adsa[/c=0] (nchar sbagliato)
+ * 
+ * New branch:
+ * ./test [c=1]asd[/c=2] => crash
  * */
 
 #include <glib.h>
@@ -33,7 +36,7 @@ static char *findColor(char *str) {
 		color = (char *)colorCodes[index]; /* e se e' piu' lunga? [/c=1] */
 	}
 
-	return color;
+	return g_strdup(color);
 }
 
 static char *convert_tag(const char *ptag)
@@ -56,7 +59,11 @@ static char *convert_tag(const char *ptag)
 		color = findColor(p);
 		if(*ptag == 'c' || *ptag == 'C') pretag = "foreground";
 		if(*ptag == 'a' || *ptag == 'A') pretag = "background";
-		if(pretag) return g_strdup_printf("<span %s=\"#%s\">",pretag,color);
+		if(pretag) {
+			char *tmp = g_strdup_printf("<span %s=\"#%s\">", pretag, color);
+			g_free(color);
+			return tmp;
+		}
 	}
 	return NULL;
 }
