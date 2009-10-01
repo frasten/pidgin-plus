@@ -1,6 +1,7 @@
 /*
  * Plus Purple plugin - Color tags by the Plus! Messenger for Windows
- * Copyright (C) 2004 Stu Tomlinson <stu@nosnilmot.com>
+ * Copyright (C) 2008-2009 Daniele Ricci <daniele.athome@gmail.com>
+ * Copyright (C) 2009 Andrea Piccinelli <frasten@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +32,7 @@
 #include <notify.h>
 #include <request.h>
 #include <signals.h>
+#include <string.h>
 #include <util.h>
 
 /*
