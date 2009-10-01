@@ -1,7 +1,10 @@
 /* Non vanno correttamente:
- * ./test [c=1]abc[u]ds[/u]adsa[/c=0] (nchar sbagliato)
+ * ./test [c=1][a=2]a[/a=0][/c=0]bcde i finali, dopo la fine del gradiente,
+ *                                    ancora con gradiente, non dovrebbero.
+ * 
+ * Stringhe malformate:
  * ./test [c=1]a[ss[u]dasd[/c]
- * ./test [c=1]a[bc[/c] (beh, e' malformata forte...)
+ * ./test [c=1]a[bc[/c] (si incasina.. beh, e' malformata forte...)
  * */
 
 #include <glib.h>
