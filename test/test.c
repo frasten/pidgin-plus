@@ -116,7 +116,7 @@ int main(int argc, char *argv[]) {
 					insideTag = TRUE;
 					printf("Primo carattere del tag: %c\n", p[1]);
 
-					/* TODO: controllo gradiente */
+					/* Controllo gradiente */
 
 					/* Try to unificate c/a*/
 					char tagCharLowerCase, tagCharUpperCase;
@@ -146,7 +146,6 @@ int main(int argc, char *argv[]) {
 						gchar *iter = p + i + 1;
 
 						/* Vado avanti e cerco il finale corrispondente */
-						/* TODO: anche il caso con [a] */
 						for (;*iter;*iter++) {
 							if (iter[0] == '[' && iter[1] == '/' &&
 								(iter[2] == tagCharLowerCase || iter[2] == tagCharUpperCase)
@@ -245,7 +244,7 @@ int main(int argc, char *argv[]) {
 
 		if (!insideTag) {
 			if (gradientFG || gradientBG) {
-				/* TODO: aggiungo i caratteri colorati del gradiente */
+				/* Aggiungo i caratteri colorati del gradiente */
 
 				int j;
 				int color[3];
