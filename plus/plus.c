@@ -79,7 +79,6 @@ static char *findColor(char *str) {
  * tag must not contains trailing [ and ] */
 static char *convert_tag(const char *ptag)
 {
-	char *buf = g_malloc0(100);
 	char *p = (char *)ptag;
 	char *color = NULL,*pretag = NULL;
 	if(*p == '/') p++;
@@ -181,7 +180,7 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 						/* Controllo gradiente */
 
 						/* Try to unificate c/a*/
-						char tagCharLowerCase, tagCharUpperCase;
+						char tagCharLowerCase = 0, tagCharUpperCase = 0;
 						if (p[1] == 'c' || p[1] == 'C') {
 							tagCharLowerCase = 'c';
 							tagCharUpperCase = 'C';
