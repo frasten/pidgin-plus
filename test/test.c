@@ -1,5 +1,6 @@
 /* Non vanno correttamente:
  * ./test [a=1]abcdsadsa[/a] (non gestisco il gradiente su BG)
+ * ./test [a=1][c=0]abcdsadsa[/c=1][/a] (non gestisco il gradiente su BG)
  * ./test [c=1]abc[u]ds[/u]adsa[/c=0] (nchar sbagliato)
  * ./test [c=0]abcdsadsa[/c=1] (nota DeltaColor: lo sbaglia, forse no, è negativo.)
  *                             MA: non finisce a 000000, ma a ff1d1d -_-
@@ -123,7 +124,7 @@ int main(int argc, char *argv[]) {
 					if ((p[1] == 'c' || p[1] == 'C' || p[1] == 'a' || p[1] == 'A') && p[2] == '=') {
 						printf("Controllo gradienti.\n");
 						gradient = FALSE; /* TODO: necessario? */
-						gchar *iter = p + i;
+						gchar *iter = p + i + 1;
 						nchars = 0;
 
 						/* Vado avanti e cerco il finale corrispondente */
@@ -146,7 +147,7 @@ int main(int argc, char *argv[]) {
 									for (j = 0;j <= 2;j++) {
 										begColor[j] = hexDec(initialColor + 2*j, 2);
 										endColor[j] = hexDec(finalColor + 2*j, 2);
-										deltaColor[j] = endColor[j] - endColor[i];
+										deltaColor[j] = endColor[j] - begColor[j];
 									}
 
 									printf("Colore finale: %s\n", finalColor);
@@ -160,13 +161,16 @@ int main(int argc, char *argv[]) {
 									gradient = TRUE;
 									gradientIndex = 0;
 									printf("gradiente\n");
+									printf("numero caratteri: %i\n", nchars);
 								}
 								else {
 									printf("non gradiente\n");
 								}
 								break;
 							}
-							nchars++; // TODO: devono essere effettivi, non cosi'.
+							else {
+								nchars++; // TODO: devono essere effettivi, non cosi'.
+							}
 						}
 					} /* fine controllo gradiente */
 					
@@ -203,15 +207,16 @@ int main(int argc, char *argv[]) {
 		if (!insideTag) {
 			if (gradient) {
 				/* TODO: aggiungo i caratteri colorati del gradiente */
-				printf("numero caratteri: %i\n", nchars);
 
 				int j;
 				int color[3];
 				for (j = 0; j <= 2; j++) {
-					int delta = deltaColor[j] * gradientIndex / (nchars - 1);
-					printf("Deltacolor: %02x\n", deltaColor[j]);
+					int delta = 0;
+					if (nchars > 1)
+						delta = deltaColor[j] * gradientIndex / (nchars - 1);
 					color[j] = begColor[j] + delta;
-					printf("delta[%i] = %i\n", j, delta);
+//					printf("Deltacolor: %i; delta=%i; color[%i]=%i\n", deltaColor[j], delta, j, color[j]);
+//					printf("delta[%i] = %i\n", j, delta);
 				}
 				
 				char *tag = g_strdup_printf("<span foreground=\"#%02x%02x%02x\">%c</span>", color[0], color[1], color[2], p[0]);
