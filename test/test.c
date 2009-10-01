@@ -1,3 +1,13 @@
+/* Non vanno correttamente:
+ * ./test [a=1]abcdsadsa[/a] (non gestisco il gradiente su BG)
+ * ./test [c=1]abc[u]ds[/u]adsa[/c=0] (nchar sbagliato)
+ * ./test [c=0]abcdsadsa[/c=1] (nota DeltaColor: lo sbaglia, forse no, è negativo.)
+ *                             MA: non finisce a 000000, ma a ff1d1d -_-
+ * ./test [c=#000000]abcdsadsa[/c=111111] (forse è sbagliato, ma non dovrebbe segfaultare)
+ * ./test [c=#000000]abcdsadsa[/c=#111111] (mette numeri a caso...)
+ * controllare la funzione della proporzione che per me è sbagliata
+ * */
+
 #include <glib.h>
 #include <string.h>
 #include <stdio.h>
@@ -13,51 +23,22 @@ const char * colorCodes[] = {
 "980299","01038c","01885f","389600","9a9e15","473400","4d0000","5f0162",
 "000047","06502f","1c5300","544d05"};
 
-/* [c=5]aha[/c=4] */
-/* [c=2] mi compro 10 mc3000[/c=10] */
-/* [a=15][c=39]A[a=16][c=4]le[/c][/a]X[/c=11][/a] */
-/* [a=16][c=16]°º¤ø,¸¸,ø¤º°`°º¤ø,¸Å£€x°º¤ø,¸¸,ø¤º°`°º¤ø,¸[/c=15][/a=15] */
-/* [b][u][c=9][a=1],..,XandeR ,.., [/a][/c][/u][/b] */
-/* [c=37]Alessio[/c] */
-/* [c=1]eyyyyyyyy[/c=3] */
-/* [c=27][a=5]♥††♠Silvia♠††♥ Mi hai insegnato tanto!!!! peccato!!!!! [/a=1][/c=4] */
-
 static char *findColor(char *str) {
+	int index;
 	char *p = str;
 	char *color = NULL;
-	if(*p == '#') color = (p+1);
-	else color = (char *)colorCodes[atoi(p)]; /* e se e' piu' lunga? [/c=1] */
+	if (*p == '#') {
+		color = (p+1);
+	}
+	else {
+		index = atoi(p);
+		if (index >= sizeof(colorCodes) / sizeof(colorCodes[0]))
+			return NULL;
+		color = (char *)colorCodes[index]; /* e se e' piu' lunga? [/c=1] */
+	}
+
 	return color;
 }
-
-static int hexDec(char *str, char size) {
-	printf("Sono in hedDex(%c%c).\n",str[0],str[1]);
-	// todo: controlla maiuscole
-	int i, j, tot = 0;
-	for (i = size - 1; i>=0; i--) {
-		int digit = 0, uppercase = 0;
-		// uppercase ?
-		if (str[i] >= 'A' && str[i] <= 'F') {
-			uppercase = 32;
-		}
-		
-		if (str[i] >= '0' && str[i] <= '9')
-			digit = str[i] - '0';
-		else if ((str[i] >= 'a' && str[i] <= 'f') ||
-			(str[i] >= 'A' && str[i] <= 'F'))
-			digit = str[i] - 'a' + 10 + uppercase;
-
-		// Esponente
-		for (j = 0;j < size - (i + 1);j++) {
-			digit *= 16;
-		}
-//		printf("Da destra: %i\n",digit);
-		tot += digit;
-	}
-	printf("Totale: %i\n", tot);
-	return tot;
-}
-
 
 static char *convert_tag(const char *ptag)
 {
@@ -84,90 +65,168 @@ static char *convert_tag(const char *ptag)
 	return NULL;
 }
 
+static int hexDec(char *str, char size) {
+	// printf("Sono in hedDex(%c%c).\n",str[0],str[1]);
+	// todo: controlla maiuscole
+	int i, j, tot = 0;
+	for (i = size - 1; i>=0; i--) {
+		int digit = 0, uppercase = 0;
+		// uppercase ?
+		if (str[i] >= 'A' && str[i] <= 'F') {
+			uppercase = 32;
+		}
+		
+		if (str[i] >= '0' && str[i] <= '9')
+			digit = str[i] - '0';
+		else if ((str[i] >= 'a' && str[i] <= 'f') ||
+			(str[i] >= 'A' && str[i] <= 'F'))
+			digit = str[i] - 'a' + 10 + uppercase;
 
-
+		// Esponente
+		for (j = 0;j < size - (i + 1);j++) {
+			digit *= 16;
+		}
+//		printf("Da destra: %i\n",digit);
+		tot += digit;
+	}
+	printf("Totale: %s => %i\n", str, tot);
+	return tot;
+}
 
 
 int main(int argc, char *argv[]) {
 	char * p = strdup(argv[1]);
-	char *conv = NULL, * tmp = NULL;
-	int i;
+	int gradientIndex, nchars;
+	int begColor[3], endColor[3], deltaColor[3];
+	unsigned char gradient = FALSE, insideTag = FALSE;
+
+	/* Ciclo di lettura caratteri */
 	GString *buf = g_string_new("");
-			for(;*p;p++)
-		{
-			printf("Pointer now points to \"%s\"\n",p);
-			if(*p == '[')
-			{
-				tmp = g_strdup(p);
-				for(i=0;i<12;i++)
-				{
-					if(tmp[i] == ']')
-					{
-						/* Controllo gradienti */
-						if ((p[1] == 'c' || p[1] == 'C' || p[1] == 'a' || p[1] == 'A') && p[2] == '=') {
-							printf("Controllo gradienti.\n");
-							char gradiente = 0;
-							gchar *iter = p + i;
-							for (;*iter;*iter++) {
-								/* cerco il /c corrispondente */
-								if ((p[1] == 'c' || p[1] == 'C') &&
-									iter[0] == '[' && iter[1] == '/' &&
-									(iter[2] == 'C' || iter[2] == 'c')
-								) {
-									printf("ho trovato un finale\n");
-									if (iter[3] == '=') {
-										/*  */
-										char *initialColor = findColor(p + 3);
-										char *finalColor = findColor(iter + 4);
-										char ri, gi, bi,  rf, gf, bf;
+	for (;*p;p++) {
+		// printf("Leggo il carattere %c\n", *p);
+		if (*p == '[') {
+			/* Controllo tag */
 
-										printf("Colore iniziale: %s\n", initialColor);
-										ri = hexDec(initialColor, 2);
-										gi = hexDec(initialColor + 2, 2);
-										bi = hexDec(initialColor + 4, 2);
-										
-										printf("Colore finale: %s\n", finalColor);
-										rf = hexDec(finalColor, 2);
-										gf = hexDec(finalColor + 2, 2);
-										bf = hexDec(finalColor + 4, 2);
+			/* Faccio un fast forward per cercare il corrispondente ],
+			 * determinando quindi se si tratta di un tag oppure no. */
+			int i;
+			for(i = 1; i < 12; i++) {
+				if (p[i] == ']') {
+					char *replace;
+					char gradientTag = FALSE;
 
-										gradiente = 1;
-										printf("gradiente\n");
+					/* Ho trovato la fine del tag, sono dentro! */
+					insideTag = TRUE;
+					printf("Primo carattere del tag: %c\n", p[1]);
+
+					/* TODO: controllo gradiente */
+					if ((p[1] == 'c' || p[1] == 'C' || p[1] == 'a' || p[1] == 'A') && p[2] == '=') {
+						printf("Controllo gradienti.\n");
+						gradient = FALSE; /* TODO: necessario? */
+						gchar *iter = p + i;
+						nchars = 0;
+
+						/* Vado avanti e cerco il finale corrispondente */
+						/* TODO: anche il caso con [a] */
+						for (;*iter;*iter++) {
+							if ((p[1] == 'c' || p[1] == 'C') &&
+								iter[0] == '[' && iter[1] == '/' &&
+								(iter[2] == 'c' || iter[2] == 'C')
+							) {
+								printf("ho trovato un finale\n");
+								if (iter[3] == '=') {
+									gradientTag = TRUE;
+									/*  */
+									char *initialColor = findColor(p + 3);
+									char *finalColor = findColor(iter + 4);
+
+									printf("Colore iniziale: %s\n", initialColor);
+
+									int j;
+									for (j = 0;j <= 2;j++) {
+										begColor[j] = hexDec(initialColor + 2*j, 2);
+										endColor[j] = hexDec(finalColor + 2*j, 2);
+										deltaColor[j] = endColor[j] - endColor[i];
 									}
-									else {
-										printf("non gradiente\n");
-										break;
-									}
-									printf("esco\n");
-									return;
+
+									printf("Colore finale: %s\n", finalColor);
+
+									// Calcolare il numero di caratteri effettivi (escludendo i tag),
+									// e suddividere il Delta R, G, B diviso il numero di caratteri,
+									// ottenendo l'incremento da aggiungere (o sottrarre)
+									// ad ogni carattere.
+									// Subito PRIMA dell'ultimo carattere, mettere il colore finale.
+
+									gradient = TRUE;
+									gradientIndex = 0;
+									printf("gradiente\n");
 								}
+								else {
+									printf("non gradiente\n");
+								}
+								break;
 							}
+							nchars++; // TODO: devono essere effettivi, non cosi'.
 						}
-						
-						tmp[i] = '\0';
-						printf("primo carattere del tag: %c\n", (char) p[1]);
-						printf("Converting tag \"%s\"\n",tmp+1);
-						conv = convert_tag(tmp+1);
-						printf("conv %s\n", conv);
-						if(conv)
-						{
-							/* tmp = [c=38 len = 5
-							 * tmp+1 = c=38 len = 4
-							 * [c=38]Daniele
-							 */
-							printf("Conversion done! \"%s\"\n",conv);
-							g_string_append(buf,conv);
-							p += strlen(tmp+1)+1;	/* avanza della lunghezza del tag +2 ([,]) */
-						}
-						break;
+					} /* fine controllo gradiente */
+					
+					/* Non devo tradurre il tag di fine gradiente: */
+					if (p[1] == '/' && p[3] == '=') {
+						gradientTag = TRUE;
+						gradient = FALSE;
 					}
-				}
-				g_free(tmp);
-				/* add normally... */
-				if(!conv) g_string_append_c(buf,*p);
-				conv = NULL;
-			}
-			else g_string_append_c(buf,*p);
-			printf("String value is \"%s\"\n",buf->str);
+
+					/* Tag convertito ed aggiunto solo se non sono in un gradiente.
+					 * Infatti in questo caso viene gestito dopo. */
+					if (!gradientTag) {
+						printf("Provo il tag %s\n", g_strndup(p + 1, i - 1));
+						replace = convert_tag(g_strndup(p + 1, i - 1));
+						if (replace) {
+							g_string_append(buf, replace);
+						}
+						g_free(replace);
+					}
+					break; /* Ne ho trovata una, non cerco le seguenti. */
+				} /* Fine if p = ] */
+			} /* Fine ciclo for per cercare la fine del tag ] */
+
+
+
+
+
 		}
+		else if (*p == ']' && insideTag) {
+			insideTag = FALSE;
+			continue; /* TODO: e' ok? */
+		}
+
+		if (!insideTag) {
+			if (gradient) {
+				/* TODO: aggiungo i caratteri colorati del gradiente */
+				printf("numero caratteri: %i\n", nchars);
+
+				int j;
+				int color[3];
+				for (j = 0; j <= 2; j++) {
+					int delta = deltaColor[j] * gradientIndex / (nchars - 1);
+					printf("Deltacolor: %02x\n", deltaColor[j]);
+					color[j] = begColor[j] + delta;
+					printf("delta[%i] = %i\n", j, delta);
+				}
+				
+				char *tag = g_strdup_printf("<span foreground=\"#%02x%02x%02x\">%c</span>", color[0], color[1], color[2], p[0]);
+				g_string_append(buf, tag);
+				gradientIndex++;
+				g_free(tag);
+			}
+			else {
+				/* Carattere normale, senza essere in un gradiente */
+				g_string_append_c(buf, p[0]);
+			}
+		}
+	}
+	/* Finito, restituisco buf */
+	/* TODO: return */
+	printf("Risultato finale: %s\n", buf->str);
 }
+
