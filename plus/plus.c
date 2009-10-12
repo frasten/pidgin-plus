@@ -136,9 +136,10 @@ static int hexDec(char *str, char size) {
 static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 {
 	char * ret = NULL;
+	gboolean setting;
 	purple_debug_misc("plusblist","Screename is \"%s\", server alias is \"%s\"\n",buddy->name,buddy->server_alias);
 
-	gboolean setting = purple_blist_node_get_bool(&buddy->node, "disable_plus");
+	setting = purple_blist_node_get_bool(&buddy->node, "disable_plus");
 	if(!setting)
 	{
 		/* get an escaped version of the alias */
@@ -174,6 +175,7 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 				for(i = 1; i < 12; i++) {
 					if (p[i] == ']') {
 						char *replace;
+						char tagCharLowerCase, tagCharUpperCase;
 						char gradientTag = FALSE;
 
 						/* Ho trovato la fine del tag, sono dentro! */
@@ -182,7 +184,7 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 						/* Controllo gradiente */
 
 						/* Try to unificate c/a*/
-						char tagCharLowerCase = 0, tagCharUpperCase = 0;
+						tagCharLowerCase = tagCharUpperCase = 0;
 						if (p[1] == 'c' || p[1] == 'C') {
 							tagCharLowerCase = 'c';
 							tagCharUpperCase = 'C';
@@ -196,6 +198,10 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 						}
 
 						if ((p[1] == tagCharLowerCase || p[1] == tagCharUpperCase) && p[2] == '=') {
+							gchar *iter = p + i + 1;
+							char insideTagFastForward = FALSE;
+							int fastForwardCharCounter = 0;
+
 							if (tagCharLowerCase == 'c') {
 								gradientFG = FALSE; /* TODO: necessario? */
 								ncharsFG = 0;
@@ -205,10 +211,6 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 								ncharsBG = 0;
 							}
 
-							gchar *iter = p + i + 1;
-
-							char insideTagFastForward = FALSE;
-							int fastForwardCharCounter = 0;
 							/* Vado avanti e cerco il finale corrispondente */
 							for (;*iter;*iter++) {
 
@@ -217,15 +219,17 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 								) {
 									purple_debug_misc("plusblist", "Gradient end found.\n");
 									if (iter[3] == '=') {
+										char *initialColor, *finalColor;
+										int j;
+
 										gradientTag = TRUE;
 										/*  */
-										char *initialColor = findColor(p + 3);
-										char *finalColor = findColor(iter + 4);
+										initialColor = findColor(p + 3);
+										finalColor = findColor(iter + 4);
 										if (!initialColor || !finalColor) break;
 
 										purple_debug_misc("plusblist", "Beginning color: %s\n", initialColor);
 
-										int j;
 										for (j = 0;j <= 2;j++) {
 											if (tagCharLowerCase == 'c') {
 												begColorFG[j] = hexDec(initialColor + 2 * j, 2);
@@ -327,7 +331,7 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 
 					int j;
 					int color[3];
-					char *fgAttribute = NULL, *bgAttribute = NULL;
+					char *tag, *fgAttribute = NULL, *bgAttribute = NULL;
 					if (gradientFG) {
 						for (j = 0; j <= 2; j++) {
 							int delta = 0;
@@ -350,7 +354,7 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 					}
 					else bgAttribute = g_strdup("");
 
-					char *tag = g_strdup_printf("<span%s%s>%c</span>", fgAttribute, bgAttribute, p[0]);
+					tag = g_strdup_printf("<span%s%s>%c</span>", fgAttribute, bgAttribute, p[0]);
 					g_free(fgAttribute);
 					g_free(bgAttribute);
 
