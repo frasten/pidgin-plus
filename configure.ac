@@ -16,7 +16,7 @@ AM_PROG_LIBTOOL
 #LIBTOOL="$LIBTOOL --silent"
 
 if test "x$GCC" = "xyes"; then
-	CFLAGS="$CFLAGS -Wall -Wextra -g3"
+	CFLAGS="$CFLAGS -Wall -Wextra -Wno-unused-parameter -Wcast-align -Wdeclaration-after-statement -Werror-implicit-function-declaration -Winit-self -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wpointer-arith -Wundef -g3"
 fi
 AC_SUBST(CFLAGS)
 
