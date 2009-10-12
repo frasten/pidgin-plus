@@ -5,6 +5,8 @@
 # Taken from the ticker plugin.
 #
 
+PLUS_VERSION := 0.1.0
+
 PIDGIN_TREE_TOP := ../../../..
 include $(PIDGIN_TREE_TOP)/libpurple/win32/global.mak
 
@@ -52,6 +54,8 @@ LIBS =			-lgtk-win32-2.0 \
 			-lpango-1.0
 
 include $(PIDGIN_COMMON_RULES)
+
+CFLAGS += -DPLUS_VERSION=\"$(PLUS_VERSION)\"
 
 ##
 ## TARGET DEFINITIONS

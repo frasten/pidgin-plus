@@ -5,7 +5,7 @@ AM_INIT_AUTOMAKE([-Wall])
 
 #AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
-AC_DEFINE_UNQUOTED(PP_VERSION, "AC_PACKAGE_VERSION", [Plus! Plugin Version])
+#AC_DEFINE_UNQUOTED(PLUS_VERSION, "AC_PACKAGE_VERSION", [Plus! Plugin Version])
 
 AC_DISABLE_STATIC
 
@@ -14,6 +14,11 @@ dnl # Setup libtool
 dnl #######################################################################
 AM_PROG_LIBTOOL
 #LIBTOOL="$LIBTOOL --silent"
+
+if test "x$GCC" = "xyes"; then
+	CFLAGS="$CFLAGS -Wall -g3"
+fi
+AC_SUBST(CFLAGS)
 
 dnl #######################################################################
 dnl # Check for purple

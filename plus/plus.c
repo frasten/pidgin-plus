@@ -480,7 +480,7 @@ static PurplePluginInfo info =
 
 	"purple-plugin-plus",					/**< id				*/
 	"Plus! color tags",								/**< name			*/
-	VERSION,										/**< version		*/
+	PLUS_VERSION,										/**< version		*/
 	"Support for Plus! color tags.",				/**  summary		*/
 	"Parses server aliases for Plus! Live Messenger color tags.\nParsing can be deactivated on a per-nick basis.",		/**  description	*/
 	"Daniele Ricci <daniele.athome@gmail.com>",			/**< author			*/
