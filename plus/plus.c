@@ -24,9 +24,10 @@
 
 #include <glib.h>
 
-#define PURPLE_PLUGINS
+#include <purple.h>
+#include "plugin.h"
 #include <pidgin.h>
-#include <version.h>
+#include "version.h"
 #include <gtkblist.h>
 
 #include <notify.h>
@@ -110,7 +111,7 @@ static char *convert_tag(const char *ptag)
  * @param size: only parse the first n chars.
  * */
 static int hexDec(char *str, char size) {
-	int i, j, tot = 0;
+	int i, tot = 0;
 	for (i = size - 1; i>=0; i--) {
 		int digit = 0, uppercase = 0;
 		/* uppercase ? */
@@ -479,7 +480,7 @@ static PurplePluginInfo info =
 
 	"purple-plugin-plus",					/**< id				*/
 	"Plus! color tags",								/**< name			*/
-	PP_VERSION,										/**< version		*/
+	VERSION,										/**< version		*/
 	"Support for Plus! color tags.",				/**  summary		*/
 	"Parses server aliases for Plus! Live Messenger color tags.\nParsing can be deactivated on a per-nick basis.",		/**  description	*/
 	"Daniele Ricci <daniele.athome@gmail.com>",			/**< author			*/
