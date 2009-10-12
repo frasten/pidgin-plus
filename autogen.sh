@@ -9,4 +9,8 @@ if [ "$1" = "clean" ]; then
 	exit
 fi
 
-autoreconf -f -i && ./configure $@
+autoreconf -f -i
+
+if [ !"$NOCONFIGURE" ]; then
+	./configure $@
+fi
