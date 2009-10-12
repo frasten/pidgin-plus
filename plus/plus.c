@@ -60,7 +60,7 @@ const char * colorCodes[] = {
 /* Finds the color associated to a color code, and also reads colors in
  * #RRGGBB format. */
 static char *findColor(char *str) {
-	int index;
+	unsigned int index;
 	char *p = str;
 	char *color = NULL;
 	if (*p == '#') {
