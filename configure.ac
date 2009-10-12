@@ -16,7 +16,7 @@ AM_PROG_LIBTOOL
 #LIBTOOL="$LIBTOOL --silent"
 
 if test "x$GCC" = "xyes"; then
-	CFLAGS="$CFLAGS -Wall -g3"
+	CFLAGS="$CFLAGS -Wall -Wextra -g3"
 fi
 AC_SUBST(CFLAGS)
 
