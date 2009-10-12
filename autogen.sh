@@ -8,5 +8,5 @@ if [ "$1" = "clean" ]; then
 		install-sh libtool ltmain.sh missing .deps .libs stamp-h1
 	exit
 fi
-exit
+
 autoreconf -f -i && ./configure $@
