@@ -142,7 +142,12 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 	if(!setting)
 	{
 		/* get an escaped version of the alias */
-		char *esc;
+		char *esc, *p;
+		GString *buf;
+		int gradientIndexFG, gradientIndexBG, ncharsFG, ncharsBG;
+		int begColorFG[3], endColorFG[3], deltaColorFG[3];
+		int begColorBG[3], endColorBG[3], deltaColorBG[3];
+		unsigned char gradientBG, gradientFG, insideTag;
 
 		/* Colorization on alias, if set. */
 		if (buddy->alias != NULL)
@@ -153,14 +158,12 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 		purple_debug_misc("plusblist","Parsing tags to \"%s\"\n",esc);
 		if(!esc) return NULL;	/* oops... */
 
-		int gradientIndexFG, gradientIndexBG, ncharsFG, ncharsBG;
-		int begColorFG[3], endColorFG[3], deltaColorFG[3];
-		int begColorBG[3], endColorBG[3], deltaColorBG[3];
-		unsigned char gradientBG = FALSE, gradientFG = FALSE, insideTag = FALSE;
-		char *p = esc;
+		gradientBG = gradientFG = insideTag = FALSE;
+		ncharsBG = ncharsFG = gradientIndexBG = gradientIndexFG = 0;
+		p = esc;
 
 		/* Ciclo di lettura caratteri */
-		GString *buf = g_string_new("");
+		buf = g_string_new("");
 		for (;*p;p++) {
 			if (*p == '[') {
 				/* Controllo tag */
