@@ -3,6 +3,8 @@ Makefile
 *.in
 *.la
 *.lo
+*.o
+*.d
 *~
 aclocal.m4
 autom4te.cache/
