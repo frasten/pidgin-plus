@@ -10,6 +10,7 @@
 #include <glib.h>
 #include <string.h>
 #include <stdio.h>
+#include <util.h>
 
 const char * colorCodes[] = {
 "ffffff","000000","00007D","009100","FF0000","7D0000","9A009A","FC7D00",
@@ -23,7 +24,7 @@ const char * colorCodes[] = {
 "000047","06502f","1c5300","544d05"};
 
 static char *findColor(char *str) {
-	int index;
+	unsigned int index;
 	char *p = str;
 	char *color = NULL;
 	if (*p == '#') {
@@ -41,7 +42,6 @@ static char *findColor(char *str) {
 
 static char *convert_tag(const char *ptag)
 {
-	char *buf = g_malloc0(100);
 	char *p = (char *)ptag;
 	char *color = NULL,*pretag = NULL;
 	if(*p == '/') p++;
@@ -69,7 +69,7 @@ static char *convert_tag(const char *ptag)
 }
 
 static int hexDec(char *str, char size) {
-	int i, j, tot = 0;
+	int i, tot = 0;
 	for (i = size - 1; i>=0; i--) {
 		int digit = 0, uppercase = 0;
 		// uppercase ?
