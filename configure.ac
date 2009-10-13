@@ -1,7 +1,6 @@
 AC_INIT([pidgin-plus], [0.1.0], [daniele.athome@gmail.com])
 AC_CANONICAL_SYSTEM
 AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE([-Wall])
 
 #AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
