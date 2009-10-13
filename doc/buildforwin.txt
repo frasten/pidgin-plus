@@ -1,0 +1,74 @@
+How to cross-compile for windows.
+
+Note: 99% of this document is taken from:
+http://code.google.com/p/pidgin-privacy-please/wiki/HowToCrossCompileForWindows
+
+
+
+=== Install the required packages ===
+
+sudo apt-get install mingw32 nsis
+
+
+
+=== Prepare the build environment ===
+
+Choose a directory to build the plugin in. In this example, we'll use ~/tmp/build
+
+export BUILDDIR=~/tmp/build
+mkdir -p $BUILDDIR
+cd $BUILDDIR
+
+
+Now, get and the pidgin windows build fetcher script:
+
+wget http://gaim-extprefs.sf.net/winpidgin-build-fetcher.sh
+bash winpidgin-build-fetcher.sh
+
+
+The script might ask you a few questions, this is how you should answer
+(the suggested pidgin version might differ on your system): 
+
+Do you want to prepare a Pidgin build environment in /tmp/build? [y/n] y
+Do you want to download a source package? [p/n] p
+What version of the Pidgin source would you like to download? [2.6.2] <enter>
+Do you want to delete temp files used to set up the build environment? [y/n] n
+
+
+Now extract the plugin (again, pidgin and plugin versions might differ): 
+
+cd pidgin-2.6.2/pidgin/plugins/
+tar xzvf ~/pidgin-plus-0.1.0.tar.gz
+
+
+=== Build the plugin ===
+
+Create a local.mak file in the source directory root
+($BUILDDIR/pidgin-<version>/local.mak) to override the Makefile
+variables - mine looks like this: 
+
+
+CC := /usr/bin/i586-mingw32msvc-cc
+GMSGFMT := msgfmt
+MAKENSIS := /usr/bin/makensis
+PERL := /usr/bin/perl
+EXTUTILS := /usr/share/perl/5.10/ExtUtils
+WINDRES := /usr/bin/i586-mingw32msvc-windres
+STRIP := /usr/bin/i586-mingw32msvc-strip
+
+INCLUDE_PATHS := -I$(PIDGIN_TREE_TOP)/../win32-dev/w32api/include
+LIB_PATHS := -L$(PIDGIN_TREE_TOP)/../win32-dev/w32api/lib
+
+
+
+
+Now, build the plugin: 
+
+cd pidgin-plus-0.1.0/plus
+make -f Makefile.mingw
+
+
+Finally, create the Windows installer: 
+
+cp ../win32/pidgin-plus.nsi .
+makensis pidgin-plus.nsi
