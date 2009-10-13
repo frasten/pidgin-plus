@@ -1,0 +1,62 @@
+Ragionamento sui gradienti
+
+Esempio:
+[c=1]ciao[/c=0]
+
+Colore 1: #000000
+Colore 2: #FFFFFF
+
+Per ogni componente RGB (ogni gruppo di 2 cifre esadecimali) dovrò
+suddividere il delta (l'escursione tra i due valori, ovvero la differenza)
+in vari step, in modo da raggiungere il risultato finale gradualmente.
+
+Di quanto devo aumentare ogni volta?
+
+Nell'esempio ho 4 lettere, quindi dovrò avere le 4 lettere ognuna di un
+colore diverso.
+
+Per la componente R (red) vado da 00 (0) a FF (255), quindi il Delta vale
+255 - 0 = 255.
+
+Ho 4 caratteri, quindi avrò queste differenze di colore:
+1) c <==> i
+2) i <==> a
+3) a <==> o
+
+Un totale di 3 step. Quindi dividerò il Delta di questa componente cromatica
+per 3 (ovvero numero_caratteri - 1), ottenendo l'incremento per lettera
+(che chiamerò delta_i).
+
+delta_i = 255 / 3 = 85
+
+Quindi i 4 colori saranno:
+0   => 00
+85  => 55
+170 => AA
+255 => FF
+
+========================================================================
+Se il colore di partenza ha valore maggiore di quello finale, non cambia
+niente:
+
+[c=0]ciao[/c=1]
+
+Colore 1: #FFFFFF
+Colore 2: #000000
+
+Delta = col_2 - col_1 = 0 - 255 = -255
+
+E' negativo, ma non importa. Avro':
+delta_i = Delta / (numero_caratteri - 1) = (-255) / (4 - 1) = -85
+
+Questo vorrà dire che ad ogni carattere incrementero' il valore del colore
+di -85 (ovvero lo decremento di 85).
+Ai fini del calcolo non cambia nulla.
+
+========================================================================
+Riepilogo:
+DeltaTot = colore_finale - colore iniziale
+delta_i = DeltaTot / (numero_caratteri - 1)
+
+colore all'indice (posizione) i =
+colore_iniziale + (delta_i * i)
