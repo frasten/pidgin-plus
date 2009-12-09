@@ -1,0 +1,11 @@
+v0.1.1 - (??/??/????)
+  * Added .nsi installer for M$ Windows.
+  * Improved build system
+  * Fixed build warnings
+  * Improved docs (including how to build for Windows)
+  * Use a smarter way to calculate power (using bit shift)
+
+v0.1.0 - (10/01/2009)
+  * Major rewrite of the plugin
+  * Added nick gradients
+  * Added some docs
