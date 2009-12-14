@@ -31,14 +31,14 @@ The script might ask you a few questions, this is how you should answer
 
 Do you want to prepare a Pidgin build environment in /tmp/build? [y/n] y
 Do you want to download a source package? [p/n] p
-What version of the Pidgin source would you like to download? [2.6.2] <enter>
+What version of the Pidgin source would you like to download? [2.6.4] <enter>
 Do you want to delete temp files used to set up the build environment? [y/n] n
 
 
 Now extract the plugin (again, pidgin and plugin versions might differ): 
 
-cd pidgin-2.6.2/pidgin/plugins/
-tar xzvf ~/pidgin-plus-0.1.0.tar.gz
+cd pidgin-2.6.4/pidgin/plugins/
+tar xzvf ~/pidgin-plus-0.1.1.tar.gz
 
 
 === Build the plugin ===

@@ -5,7 +5,7 @@
 # Taken from the ticker plugin.
 #
 
-PLUS_VERSION := 0.1.0
+PLUS_VERSION := 0.1.1
 
 PIDGIN_TREE_TOP := ../../../..
 include $(PIDGIN_TREE_TOP)/libpurple/win32/global.mak
