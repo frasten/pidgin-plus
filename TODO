@@ -5,17 +5,10 @@
 Known Issues with these patterns:
 [c=9]prova <3[/c=2] => viene tradotta in &lt; e quindi durante la
   suddivisione in caratteri non va più
-[c=0]prova è[/c=1]
-
-[c=1][a=2]a[/a=0][/c=0]bcde i finali, dopo la fine del gradiente,
-                                    ancora con gradiente, non dovrebbero.
 
 [c=1]a[ss[u]dasd[/c]
 [c=1]a[bc[/c] (si incasina.. beh, e' malformata forte...)
 [c=1][b](¯`·._.·[♫_LUKE_♫]·._.·´¯)[/b][/c=9]
-[c=#FF0080][b]    .:｡✿*ﾟѕιмσиα.:｡✿ﾟ[/b][/c]
-[c=7][b]©ίρο[/b][/c=45]
-[c=1][b][u]..:: *FùMiTsUki* ::.[/u][/b][/c=14]
 
 
 Vari caratteri problematici:
