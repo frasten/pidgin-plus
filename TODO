@@ -3,9 +3,6 @@
 
 
 Known Issues with these patterns:
-[c=9]prova <3[/c=2] => viene tradotta in &lt; e quindi durante la
-  suddivisione in caratteri non va più
-
 [c=1]a[ss[u]dasd[/c]
 [c=1]a[bc[/c] (si incasina.. beh, e' malformata forte...)
 [c=1][b](¯`·._.·[♫_LUKE_♫]·._.·´¯)[/b][/c=9]
