@@ -152,10 +152,8 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 
 		/* Colorization on alias, if set. */
 		if (buddy->alias != NULL)
-			//esc = g_markup_escape_text(buddy->alias, -1);
 			esc = g_strdup(buddy->alias);
 		else
-			//esc = g_markup_escape_text(buddy->server_alias,-1);
 			esc = g_strdup(buddy->server_alias);
 
 		purple_debug_misc("plusblist","Parsing tags to \"%s\"\n",esc);
