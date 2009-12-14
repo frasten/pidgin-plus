@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
 
 	/* Ciclo di lettura caratteri */
 	GString *buf = g_string_new("");
-	for (;*p;p++) {
+	for (;*p;p = g_utf8_next_char(p)) {
 		// printf("Leggo il carattere %c\n", *p);
 		if (*p == '[') {
 			/* Controllo tag */
@@ -268,6 +268,9 @@ int main(int argc, char *argv[]) {
 		}
 
 		if (!insideTag) {
+			gchar *thischar = g_new0(char, 10);
+			g_utf8_strncpy(thischar, p, 1);
+
 			if (gradientFG || gradientBG) {
 				/* Aggiungo i caratteri colorati del gradiente */
 
@@ -299,8 +302,10 @@ int main(int argc, char *argv[]) {
 					bgAttribute = g_strdup_printf(" background=\"#%02x%02x%02x\"", color[0], color[1], color[2]);
 				}
 				else bgAttribute = g_strdup("");
+				// printf("%s\n", g_utf8_offset_to_pointer(p, 2));
 
-				char *tag = g_strdup_printf("<span%s%s>%c</span>", fgAttribute, bgAttribute, p[0]);
+				char *tag = g_strdup_printf("<span%s%s>%s</span>", fgAttribute, bgAttribute, thischar);
+
 				g_free(fgAttribute);
 				g_free(bgAttribute);
 
@@ -311,11 +316,13 @@ int main(int argc, char *argv[]) {
 			}
 			else {
 				/* Carattere normale, senza essere in un gradiente */
-				g_string_append_c(buf, p[0]);
+				g_string_append(buf, thischar);
 			}
+			g_free(thischar);
 		}
 	}
 	/* Finito, restituisco buf */
+	g_assert(g_utf8_validate(buf->str, -1, NULL));
 	/* TODO: return */
 	printf("Risultato finale: %s\n", buf->str);
 }

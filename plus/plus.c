@@ -165,7 +165,7 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 
 		/* Ciclo di lettura caratteri */
 		buf = g_string_new("");
-		for (;*p;p++) {
+		for (;*p;p = g_utf8_next_char(p)) {
 			if (*p == '[') {
 				/* Controllo tag */
 
@@ -326,6 +326,11 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 			}
 
 			if (!insideTag) {
+				/* Get the next character (using utf-8) */
+				/* TODO: must HTML escape this */
+				gchar *thischar = g_new0(char, 10);
+				g_utf8_strncpy(thischar, p, 1);
+
 				if (gradientFG || gradientBG) {
 					/* Aggiungo i caratteri colorati del gradiente */
 
@@ -354,7 +359,7 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 					}
 					else bgAttribute = g_strdup("");
 
-					tag = g_strdup_printf("<span%s%s>%c</span>", fgAttribute, bgAttribute, p[0]);
+					char *tag = g_strdup_printf("<span%s%s>%s</span>", fgAttribute, bgAttribute, thischar);
 					g_free(fgAttribute);
 					g_free(bgAttribute);
 
@@ -365,12 +370,16 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 				}
 				else {
 					/* Carattere normale, senza essere in un gradiente */
-					g_string_append_c(buf, p[0]);
+					g_string_append_c(buf, thischar);
 				}
+				g_free(thischar);
 			}
 		}
 		g_free(esc);
 		ret = g_string_free(buf,FALSE);
+		/* Check against utf8 errors */
+		g_assert(g_utf8_validate(ret, -1, NULL));
+
 		purple_debug_misc("plusblist","Return value will be \"%s\"\n", ret);
 		if(!pango_parse_markup(ret,-1,0,NULL,NULL,NULL,NULL))
 		{
