@@ -1,4 +1,8 @@
-v0.1.1 - (??/??/????)
+v0.2.0 - (12/14/2009)
+  * Added support for utf-8 characters. Now almost every nick should be
+    colorized.
+
+v0.1.1 - (12/14/2009)
   * Added .nsi installer for M$ Windows.
   * Improved build system
   * Fixed build warnings

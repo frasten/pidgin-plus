@@ -12,7 +12,7 @@
 
 ;Name and file
 Name "Pidgin Plus! Plugin"
-OutFile "pidgin-plus-0.1.1.exe"
+OutFile "pidgin-plus-0.2.0.exe"
 
 ;Default installation folder
 InstallDir "$PROGRAMFILES\Pidgin\plugins"

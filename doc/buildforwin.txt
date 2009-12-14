@@ -38,7 +38,7 @@ Do you want to delete temp files used to set up the build environment? [y/n] n
 Now extract the plugin (again, pidgin and plugin versions might differ): 
 
 cd pidgin-2.6.4/pidgin/plugins/
-tar xzvf ~/pidgin-plus-0.1.1.tar.gz
+tar xzvf ~/pidgin-plus-0.2.0.tar.gz
 
 
 === Build the plugin ===
