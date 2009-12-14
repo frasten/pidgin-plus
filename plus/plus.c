@@ -152,9 +152,11 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 
 		/* Colorization on alias, if set. */
 		if (buddy->alias != NULL)
-			esc = g_markup_escape_text(buddy->alias, -1);
+			//esc = g_markup_escape_text(buddy->alias, -1);
+			esc = g_strdup(buddy->alias);
 		else
-			esc = g_markup_escape_text(buddy->server_alias,-1);
+			//esc = g_markup_escape_text(buddy->server_alias,-1);
+			esc = g_strdup(buddy->server_alias);
 
 		purple_debug_misc("plusblist","Parsing tags to \"%s\"\n",esc);
 		if(!esc) return NULL;	/* oops... */
@@ -327,9 +329,11 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 
 			if (!insideTag) {
 				/* Get the next character (using utf-8) */
-				/* TODO: must HTML escape this */
-				gchar *thischar = g_new0(char, 10);
-				g_utf8_strncpy(thischar, p, 1);
+				gchar *thischar_unescaped, *thischar;
+				thischar_unescaped = g_new0(char, 10);
+				g_utf8_strncpy(thischar_unescaped, p, 1);
+				thischar = g_markup_escape_text(thischar_unescaped, -1);
+				g_free(thischar_unescaped);
 
 				if (gradientFG || gradientBG) {
 					/* Aggiungo i caratteri colorati del gradiente */

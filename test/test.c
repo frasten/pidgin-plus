@@ -268,8 +268,11 @@ int main(int argc, char *argv[]) {
 		}
 
 		if (!insideTag) {
-			gchar *thischar = g_new0(char, 10);
-			g_utf8_strncpy(thischar, p, 1);
+			gchar *thischar_unescaped, *thischar;
+			thischar_unescaped = g_new0(char, 10);
+			g_utf8_strncpy(thischar_unescaped, p, 1);
+			thischar = g_markup_escape_text(thischar_unescaped, -1);
+			g_free(thischar_unescaped);
 
 			if (gradientFG || gradientBG) {
 				/* Aggiungo i caratteri colorati del gradiente */
