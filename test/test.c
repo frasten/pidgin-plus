@@ -276,7 +276,7 @@ int main(int argc, char *argv[]) {
 
 				int j;
 				int color[3];
-				char *fgAttribute = NULL, *bgAttribute = NULL;
+				char *tag, *fgAttribute = NULL, *bgAttribute = NULL;
 				if (gradientFG) {
 					for (j = 0; j <= 2; j++) {
 						int delta = 0;
@@ -304,7 +304,7 @@ int main(int argc, char *argv[]) {
 				else bgAttribute = g_strdup("");
 				// printf("%s\n", g_utf8_offset_to_pointer(p, 2));
 
-				char *tag = g_strdup_printf("<span%s%s>%s</span>", fgAttribute, bgAttribute, thischar);
+				tag = g_strdup_printf("<span%s%s>%s</span>", fgAttribute, bgAttribute, thischar);
 
 				g_free(fgAttribute);
 				g_free(bgAttribute);
