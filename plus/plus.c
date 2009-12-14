@@ -359,7 +359,7 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 					}
 					else bgAttribute = g_strdup("");
 
-					char *tag = g_strdup_printf("<span%s%s>%s</span>", fgAttribute, bgAttribute, thischar);
+					tag = g_strdup_printf("<span%s%s>%s</span>", fgAttribute, bgAttribute, thischar);
 					g_free(fgAttribute);
 					g_free(bgAttribute);
 
@@ -370,7 +370,7 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 				}
 				else {
 					/* Carattere normale, senza essere in un gradiente */
-					g_string_append_c(buf, thischar);
+					g_string_append(buf, thischar);
 				}
 				g_free(thischar);
 			}
