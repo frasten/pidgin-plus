@@ -151,7 +151,7 @@ int main(int argc, char *argv[]) {
 						char insideTagFastForward = FALSE;
 						int fastForwardCharCounter = 0;
 						/* Vado avanti e cerco il finale corrispondente */
-						for (;*iter;*iter++) {
+						for (;*iter;iter = g_utf8_next_char(iter)) {
 
 							if (iter[0] == '[' && iter[1] == '/' &&
 								(iter[2] == tagCharLowerCase || iter[2] == tagCharUpperCase)
