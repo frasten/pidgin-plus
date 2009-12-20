@@ -180,7 +180,6 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 						char gradientTag = FALSE;
 
 						/* Ho trovato la fine del tag, sono dentro! */
-						insideTag = TRUE;
 
 						/* Controllo gradiente */
 
@@ -199,9 +198,9 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 							/* sarebbe carino fargli skippare la parte di controllo gradiente */
 						}
 						else {
-							insideTag = FALSE;
 							break;
 						}
+						insideTag = TRUE;
 
 						if ((p[1] == tagCharLowerCase || p[1] == tagCharUpperCase) && p[2] == '=') {
 							gchar *iter = p + i + 1;
