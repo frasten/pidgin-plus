@@ -5,34 +5,59 @@ define('COMMAND', './test/test.o');
 check_command_file();
 
 $patterns = array(
-"[i][c=29][c=28][c=11][c=48][c=47][i](L)[c=6][c=9][c=13][c=30]S[/c]3[/c]R[/c]3[/c][/i]N[/c]3[/c]L[/c]L[/c]A[/c][/i]",
-"[c=1][b](¯`·._.·[♫_LUKE_♫]·._.·´¯)[/b][/c=9]",
-"[c=#FF0080][b]    .:｡✿*ﾟѕιмσиα.:｡✿ﾟ[/b][/c]",
-"[c=#FA0A64]Ale [/c]",
-"[b][a=1][c=9]UnO.Ke.Si.KiAmA.[/c=2]AleX[/a=63][/b]",
-"[c=9][a=1][b][i]-LuKe-[/i][/b][/a][/c]",
-"[c=46][a=1] ♥---==-♥°° ♥††♠Silvia♠††♥°°♥-=...[/a=46][/c=1]",
-"[c=7][b]©ίρο[/b][/c=45]",
-"[c=1][b][u]..:: *FùMiTsUki* ::.[/u][/b][/c=14]",
-"[c=9]prova <3[/c=2]",
-"[c=0]<>ciao & \" ' ( asd )[/c=1]",
-"[c=5][b][i]ReD - 20[/c][/b][/i]  (B) @ WORK| www.myspace.com/masks_Insomnia  x Foto",
-"(*)[b][c=#000066] frittomisto84 [/c=45][/b](*)",
-"[Vhêmt]",
+"[i][c=29][c=28][c=11][c=48][c=47][i](L)[c=6][c=9][c=13][c=30]S[/c]3[/c]R[/c]3[/c][/i]N[/c]3[/c]L[/c]L[/c]A[/c][/i]" => '<i><span foreground="#ff62ff"><span foreground="#ff6d66"><span foreground="#00FFFF"><span foreground="#0000d3"><span foreground="#de00de"><i>(L)<span foreground="#9A009A"><span foreground="#00FC00"><span foreground="#FF00FF"><span foreground="#6c6cff">S</span>3</span>R</span>3</span></i>N</span>3</span>L</span>L</span>A</span></i>',
+
+"[c=1][b](¯`·._.·[♫_LUKE_♫]·._.·´¯)[/b][/c=9]" => '<b><span foreground="#000000">(</span><span foreground="#001000">¯</span><span foreground="#002100">`</span><span foreground="#003200">·</span><span foreground="#004300">.</span><span foreground="#005400">_</span><span foreground="#006400">.</span><span foreground="#007500">·</span><span foreground="#008600">[</span><span foreground="#009700">♫</span><span foreground="#00a800">_</span><span foreground="#00b800">L</span><span foreground="#00c900">U</span><span foreground="#00da00">K</span><span foreground="#00eb00">E</span><span foreground="#00fc00">_</span><span foreground="#0010c00">♫</span><span foreground="#0011d00">]</span><span foreground="#0012e00">·</span><span foreground="#0013f00">.</span><span foreground="#0015000">_</span><span foreground="#0016000">.</span><span foreground="#0017100">·</span><span foreground="#0018200">´</span><span foreground="#0019300">¯</span><span foreground="#001a400">)</span></b>',
+"[c=#FF0080][b]    .:｡✿*ﾟѕιмσиα.:｡✿ﾟ[/b][/c]" => '<span foreground="#FF0080"><b>    .:｡✿*ﾟѕιмσиα.:｡✿ﾟ</b></span>',
+"[c=#FA0A64]Ale [/c]" => '<span foreground="#FA0A64">Ale </span>',
+"[b][a=1][c=9]UnO.Ke.Si.KiAmA.[/c=2]AleX[/a=63][/b]" => '<b><span foreground="#00fc00" background="#000000">U</span><span foreground="#00ec08" background="#050005">n</span><span foreground="#00db10" background="#0a000a">O</span><span foreground="#00ca19" background="#0f000f">.</span><span foreground="#00b921" background="#140014">K</span><span foreground="#00a829" background="#190019">e</span><span foreground="#009832" background="#1e001e">.</span><span foreground="#00873a" background="#230024">S</span><span foreground="#007642" background="#280029">i</span><span foreground="#00654b" background="#2d002e">.</span><span foreground="#005453" background="#320033">K</span><span foreground="#00445b" background="#370038">i</span><span foreground="#003364" background="#3c003d">A</span><span foreground="#00226c" background="#410043">m</span><span foreground="#001174" background="#460048">A</span><span foreground="#00007d" background="#4b004d">.</span><span background="#500052">A</span><span background="#550057">l</span><span background="#5a005c">e</span><span background="#5f0162">X</span></b>',
+"[c=9][a=1][b][i]-LuKe-[/i][/b][/a][/c]" => '<span foreground="#00FC00"><span background="#000000"><b><i>-LuKe-</i></b></span></span>',
+"[c=46][a=1] ♥---==-♥°° ♥††♠Silvia♠††♥°°♥-=...[/a=46][/c=1]" => '<span foreground="#eb0505" background="#000000"> </span><span foreground="#e40505" background="#070000">♥</span><span foreground="#dd0505" background="#0e0000">-</span><span foreground="#d60505" background="#150000">-</span><span foreground="#cf0505" background="#1c0000">-</span><span foreground="#c80505" background="#230000">=</span><span foreground="#c10505" background="#2a0000">=</span><span foreground="#ba0404" background="#310101">-</span><span foreground="#b30404" background="#380101">♥</span><span foreground="#ab0404" background="#400101">°</span><span foreground="#a40404" background="#470101">°</span><span foreground="#9d0404" background="#4e0101"> </span><span foreground="#960404" background="#550101">♥</span><span foreground="#8f0404" background="#5c0101">†</span><span foreground="#880303" background="#630202">†</span><span foreground="#810303" background="#6a0202">♠</span><span foreground="#7a0303" background="#710202">S</span><span foreground="#720303" background="#790202">i</span><span foreground="#6b0303" background="#800202">l</span><span foreground="#640303" background="#870202">v</span><span foreground="#5d0202" background="#8e0303">i</span><span foreground="#560202" background="#950303">a</span><span foreground="#4f0202" background="#9c0303">♠</span><span foreground="#480202" background="#a30303">†</span><span foreground="#410202" background="#aa0303">†</span><span foreground="#390202" background="#b20303">♥</span><span foreground="#320202" background="#b90303">°</span><span foreground="#2b0101" background="#c00404">°</span><span foreground="#240101" background="#c70404">♥</span><span foreground="#1d0101" background="#ce0404">-</span><span foreground="#160101" background="#d50404">=</span><span foreground="#0f0101" background="#dc0404">.</span><span foreground="#080101" background="#e30404">.</span><span foreground="#000000" background="#eb0505">.</span>',
+"[c=7][b]©ίρο[/b][/c=45]" => '<b><span foreground="#fc7d00">©</span><span foreground="#f18006">ί</span><span foreground="#e5840c">ρ</span><span foreground="#d98812">ο</span></b>',
+"[c=1][b][u]..:: *FùMiTsUki* ::.[/u][/b][/c=14]" => '<b><u><span foreground="#000000">.</span><span foreground="#060606">.</span><span foreground="#0d0d0d">:</span><span foreground="#131313">:</span><span foreground="#1a1a1a"> </span><span foreground="#202020">*</span><span foreground="#272727">F</span><span foreground="#2e2e2e">ù</span><span foreground="#343434">M</span><span foreground="#3b3b3b">i</span><span foreground="#414141">T</span><span foreground="#484848">s</span><span foreground="#4e4e4e">U</span><span foreground="#555555">k</span><span foreground="#5c5c5c">i</span><span foreground="#626262">*</span><span foreground="#696969"> </span><span foreground="#6f6f6f">:</span><span foreground="#767676">:</span><span foreground="#7d7d7d">.</span></u></b>',
+"[c=9]prova <3[/c=2]" => '<span foreground="#00fc00">p</span><span foreground="#00d811">r</span><span foreground="#00b423">o</span><span foreground="#009035">v</span><span foreground="#006c47">a</span><span foreground="#004859"> </span><span foreground="#00246b">&lt;</span><span foreground="#00007d">3</span>',
+"[c=0]<>ciao & \" ' ( asd )[/c=1]" => '<span foreground="#ffffff">&lt;</span><span foreground="#f2f2f2">&gt;</span><span foreground="#e5e5e5">c</span><span foreground="#d7d7d7">i</span><span foreground="#cacaca">a</span><span foreground="#bcbcbc">o</span><span foreground="#afafaf"> </span><span foreground="#a2a2a2">&amp;</span><span foreground="#949494"> </span><span foreground="#878787">&quot;</span><span foreground="#797979"> </span><span foreground="#6c6c6c">&apos;</span><span foreground="#5e5e5e"> </span><span foreground="#515151">(</span><span foreground="#444444"> </span><span foreground="#363636">a</span><span foreground="#292929">s</span><span foreground="#1b1b1b">d</span><span foreground="#0e0e0e"> </span><span foreground="#000000">)</span>',
+"[c=5][b][i]ReD - 20[/c][/b][/i]  (B) @ WORK| www.myspace.com/masks_Insomnia  x Foto" => '<span foreground="#7D0000"><b><i>ReD - 20</span></b></i>  (B) @ WORK| www.myspace.com/masks_Insomnia  x Foto',
+"(*)[b][c=#000066] frittomisto84 [/c=45][/b](*)" => '(*)<b><span foreground="#000066"> </span><span foreground="#0f0960">f</span><span foreground="#1f135a">r</span><span foreground="#2e1d54">i</span><span foreground="#3e264e">t</span><span foreground="#4d3048">t</span><span foreground="#5d3a42">o</span><span foreground="#6c443c">m</span><span foreground="#7c4d36">i</span><span foreground="#8b5730">s</span><span foreground="#9b612a">t</span><span foreground="#aa6a24">o</span><span foreground="#ba741e">8</span><span foreground="#c97e18">4</span><span foreground="#d98812"> </span></b>(*)',
+"[Vhêmt]" => '[Vhêmt]',
+"[c=1]ab[/c=2](*)" => '<span foreground="#000000">a</span><span foreground="#00007D">b</span>(*)',
+"[c=1]ab[/c=2]aaaaaa" => '<span foreground="#000000">a</span><span foreground="#00007D">b</span>aaaaaa',
+"[c=1][a=2]a[/a=0][/c=0]bcde" => '<span foreground="#000000" background="#00007d">a</span>bcde',
 );
+// <span foreground="#000000">a</span><span foreground="#00007d">b</span><span foreground="#0000fa">(</span><span foreground="#0000177">*</span><span foreground="#00001f4">)</span>
 
+$counter = 1;
+foreach ($patterns as $pattern => $expected) {
+	echo "Testing pattern $counter... ";
+	//test($pattern);
+	$result = test($pattern);
+	$result = preg_replace_callback('/(foreground|background)="(#.{6})"/', 'replace_lowercase', $result);
+	$expected = preg_replace_callback('/(foreground|background)="(#.{6})"/', 'replace_lowercase', $expected);
 
-for ($i = 0; $i < sizeof($patterns); $i++) {
-	echo "Testing pattern " . ($i+1) . "... ";
-	test($patterns[$i]);
-	echo "ok.\n";
+	if ($result == $expected) {
+		echo "ok.\n";
+	}
+	else {
+		// Error
+		echo "ERROR.\n";
+		echo "PATTERN: $pattern\n";
+		echo "EXPECTED:\n";
+		echo "$expected\n";
+		echo "RESULT:\n";
+		echo "$result\n\n";
+	}
+	$counter++;
+}
+
+function replace_lowercase($matches) {
+	return "{$matches[1]}=\"" . strtolower($matches[2]) . "\"";
 }
 
 
 function test($pattern) {
 	$pattern = str_replace('"', '\"', $pattern);
 	$pattern = str_replace('`', '\`', $pattern);
-	execute(COMMAND . " \"$pattern\"");
+	return execute(COMMAND . " \"$pattern\"");
 }
 
 function execute($command, $keep_newlines = false) {
