@@ -96,7 +96,7 @@ static int hexDec(char *str, char size) {
 
 
 int main(int argc, char *argv[]) {
-	char *p = g_markup_escape_text(argv[1], -1);
+	char *p = argv[1];
 
 	int gradientIndexFG, gradientIndexBG, ncharsFG, ncharsBG;
 	int begColorFG[3], endColorFG[3], deltaColorFG[3];
