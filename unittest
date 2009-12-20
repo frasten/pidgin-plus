@@ -29,6 +29,7 @@ $patterns = array(
 // <span foreground="#000000">a</span><span foreground="#00007d">b</span><span foreground="#0000fa">(</span><span foreground="#0000177">*</span><span foreground="#00001f4">)</span>
 
 $counter = 1;
+$num_errors = 0;
 foreach ($patterns as $pattern => $expected) {
 	echo "Testing pattern $counter... ";
 	//test($pattern);
@@ -47,9 +48,17 @@ foreach ($patterns as $pattern => $expected) {
 		echo "$expected\n";
 		echo "RESULT:\n";
 		echo "$result\n\n";
+		$num_errors++;
 	}
 	$counter++;
 }
+
+echo str_repeat('=', 60) . "\n";
+echo "Total: " . sizeof($patterns) . "\n";
+echo "Errors: $num_errors\n";
+
+
+
 
 function replace_lowercase($matches) {
 	return "{$matches[1]}=\"" . strtolower($matches[2]) . "\"";
