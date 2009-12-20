@@ -298,7 +298,7 @@ int main(int argc, char *argv[]) {
 		}
 		else if (*p == ']' && insideTag) {
 			insideTag = FALSE;
-			continue; /* TODO: e' ok? */
+			continue;
 		}
 
 		if (!insideTag) {
@@ -368,7 +368,7 @@ int main(int argc, char *argv[]) {
 	}
 	/* Finito, restituisco buf */
 	g_assert(g_utf8_validate(buf->str, -1, NULL));
-	/* TODO: return */
+
 #ifdef PLUS_DEBUG
 	printf("Risultato finale: ");
 #endif

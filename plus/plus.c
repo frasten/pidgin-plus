@@ -335,7 +335,7 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 			}
 			else if (*p == ']' && insideTag) {
 				insideTag = FALSE;
-				continue; /* TODO: e' ok? */
+				continue;
 			}
 
 			if (!insideTag) {
