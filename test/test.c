@@ -147,6 +147,9 @@ int main(int argc, char *argv[]) {
 
 
 					if ((p[1] == tagCharLowerCase || p[1] == tagCharUpperCase) && p[2] == '=') {
+						gchar *iter = p + i + 1;
+						char insideTagFastForward = FALSE;
+						int fastForwardCharCounter = 0;
 #ifdef PLUS_DEBUG
 						printf("Controllo gradienti.\n");
 #endif
@@ -159,10 +162,6 @@ int main(int argc, char *argv[]) {
 							ncharsBG = 0;
 						}
 
-						gchar *iter = p + i + 1;
-
-						char insideTagFastForward = FALSE;
-						int fastForwardCharCounter = 0;
 						/* Vado avanti e cerco il finale corrispondente */
 						for (;*iter;iter = g_utf8_next_char(iter)) {
 
@@ -272,7 +271,7 @@ int main(int argc, char *argv[]) {
 						gradientTag = TRUE;
 						if (tagCharLowerCase == 'c')
 							gradientFG = FALSE;
-						else
+						else if (tagCharLowerCase == 'a')
 							gradientBG = FALSE;
 					}
 

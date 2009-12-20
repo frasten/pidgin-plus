@@ -310,7 +310,7 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 							gradientTag = TRUE;
 							if (tagCharLowerCase == 'c')
 								gradientFG = FALSE;
-							else
+							else if (tagCharLowerCase == 'a')
 								gradientBG = FALSE;
 						}
 
