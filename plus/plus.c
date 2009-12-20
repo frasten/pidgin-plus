@@ -195,7 +195,7 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 							tagCharUpperCase = 'A';
 						}
 						else if (p[1] == 'b' || p[1] == 'B' || p[1] == 'i' || p[1] == 'I' ||
-							p[1] == 'u' || p[1] == 'U' || p[1] == 's' || p[1] == 'S') {
+							p[1] == 'u' || p[1] == 'U' || p[1] == 's' || p[1] == 'S' || p[1] == '/') {
 							/* sarebbe carino fargli skippare la parte di controllo gradiente */
 						}
 						else {
