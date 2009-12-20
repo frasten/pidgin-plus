@@ -1,3 +1,7 @@
+ifndef NODEBUG
+	PLUS_DEBUG := -DPLUS_DEBUG
+endif
+
 CC := gcc
 
 objects := test.o
@@ -30,7 +34,7 @@ SIMPLE_WARNINGS := -Wextra -ansi -std=c99 -Wno-unused-parameter
 OTHER_WARNINGS := -D_FORTIFY_SOURCE=2 -fstack-protector -g3 -Wdisabled-optimization \
 	-Wendif-labels -Wformat=2 -Wstack-protector -Wswitch
 
-CFLAGS += $(EXTRA_WARNINGS) $(OTHER_WARNINGS)
+CFLAGS += $(EXTRA_WARNINGS) $(OTHER_WARNINGS) $(PLUS_DEBUG)
 
 
 all: $(objects)

@@ -31,22 +31,23 @@ function test($pattern) {
 	echo execute(COMMAND . ' ' . $pattern);
 }
 
-function execute($command) {
+function execute($command, $keep_newlines = false) {
 	$output = `$command`;
-	return preg_replace("/\n/", '', $output);
+	if (!$keep_newlines)
+		$output = preg_replace("/\n/", '', $output);
+	return $output;
 }
 
 function check_command_file() {
+	echo "Try to compile... ";
+	$buildoutput = execute('cd ' . dirname(COMMAND) . ';make clean; NODEBUG=y make 2>&1', true);
 	if (!is_file(COMMAND)) {
-		echo "Missing command file. Try to compile... ";
-		@execute('cd ' . dirname(COMMAND) . ';make');
-		if (!is_file(COMMAND)) {
-			echo 'error.\n';
-			exit;
-		}
-		else {
-			echo "ok.\n";
-		}
+		echo 'error:\n';
+		echo $buildoutput;
+		exit;
+	}
+	else {
+		echo "ok.\n";
 	}
 }
 ?>
