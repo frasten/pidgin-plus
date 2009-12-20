@@ -26,7 +26,7 @@ const char * colorCodes[] = {
 static char *findColor(char *str) {
 	unsigned int index;
 	char *p = str;
-	char *color = NULL;
+	const char *color = NULL;
 	if (*p == '#') {
 		color = (p+1);
 	}
@@ -34,7 +34,7 @@ static char *findColor(char *str) {
 		index = atoi(p);
 		if (index >= sizeof(colorCodes) / sizeof(colorCodes[0]))
 			return NULL;
-		color = (char *)colorCodes[index]; /* e se e' piu' lunga? [/c=1] */
+		color = colorCodes[index];
 	}
 
 	return g_strdup(color);
