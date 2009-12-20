@@ -280,8 +280,16 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 
 								if (iter[0] == '[') {
 									/* sono FORSE all'interno di un tag*/
-									insideTagFastForward = TRUE; /* TODO: non e' vero, limite massimo caratteri */
-									fastForwardCharCounter = 0;
+									if (iter[1] == 'b' || iter[1] == 'B' ||
+										iter[1] == 'i' || iter[1] == 'I' ||
+										iter[1] == 'u' || iter[1] == 'U' ||
+										iter[1] == 's' || iter[1] == 'S' ||
+										iter[1] == 'a' || iter[1] == 'A' ||
+										iter[1] == 'c' || iter[1] == 'C' ||
+										iter[1] == '/') {
+											insideTagFastForward = TRUE; /* TODO: non e' vero, limite massimo caratteri */
+											fastForwardCharCounter = 0;
+									}
 								}
 								else if (iter[0] == ']' && insideTagFastForward) {
 									/* ero all'interno di un tag ed ora l'ho chiuso */

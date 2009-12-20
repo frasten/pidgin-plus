@@ -121,7 +121,6 @@ int main(int argc, char *argv[]) {
 					char gradientTag = FALSE;
 
 					/* Ho trovato la fine del tag, sono dentro! */
-					insideTag = TRUE;
 #ifdef PLUS_DEBUG
 					printf("Primo carattere del tag: %c\n", p[1]);
 #endif
@@ -142,9 +141,9 @@ int main(int argc, char *argv[]) {
 						/* sarebbe carino fargli skippare la parte di controllo gradiente */
 					}
 					else {
-						insideTag = FALSE;
 						break;
 					}
+					insideTag = TRUE;
 
 
 					if ((p[1] == tagCharLowerCase || p[1] == tagCharUpperCase) && p[2] == '=') {
@@ -238,13 +237,20 @@ int main(int argc, char *argv[]) {
 							else {
 								if (tagCharLowerCase == 'c') ncharsFG++; // TODO: devono essere effettivi, non cosi'.
 								else ncharsBG++;
-
 							}
 
 							if (iter[0] == '[') {
 								/* sono FORSE all'interno di un tag*/
-								insideTagFastForward = TRUE; /* TODO: non e' vero, limite massimo caratteri */
-								fastForwardCharCounter = 0;
+								if (iter[1] == 'b' || iter[1] == 'B' ||
+									iter[1] == 'i' || iter[1] == 'I' ||
+									iter[1] == 'u' || iter[1] == 'U' ||
+									iter[1] == 's' || iter[1] == 'S' ||
+									iter[1] == 'a' || iter[1] == 'A' ||
+									iter[1] == 'c' || iter[1] == 'C' ||
+									iter[1] == '/') {
+									insideTagFastForward = TRUE; /* TODO: non e' vero, limite massimo caratteri */
+									fastForwardCharCounter = 0;
+								}
 							}
 							else if (iter[0] == ']' && insideTagFastForward) {
 								/* ero all'interno di un tag ed ora l'ho chiuso */
