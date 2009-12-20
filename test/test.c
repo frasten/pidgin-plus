@@ -88,7 +88,9 @@ static int hexDec(char *str, char size) {
 		digit *= (1<<((size - i -  1) << 2));
 		tot += digit;
 	}
+#ifdef PLUS_DEBUG
 	printf("Totale: %s => %i\n", str, tot);
+#endif
 	return tot;
 }
 
@@ -104,7 +106,9 @@ int main(int argc, char *argv[]) {
 	/* Ciclo di lettura caratteri */
 	GString *buf = g_string_new("");
 	for (;*p;p = g_utf8_next_char(p)) {
+#ifdef PLUS_DEBUG
 		// printf("Leggo il carattere %c\n", *p);
+#endif
 		if (*p == '[') {
 			/* Controllo tag */
 
@@ -118,8 +122,9 @@ int main(int argc, char *argv[]) {
 
 					/* Ho trovato la fine del tag, sono dentro! */
 					insideTag = TRUE;
+#ifdef PLUS_DEBUG
 					printf("Primo carattere del tag: %c\n", p[1]);
-
+#endif
 					/* Controllo gradiente */
 
 					/* Try to unificate c/a*/
@@ -137,7 +142,9 @@ int main(int argc, char *argv[]) {
 					}
 
 					if ((p[1] == tagCharLowerCase || p[1] == tagCharUpperCase) && p[2] == '=') {
+#ifdef PLUS_DEBUG
 						printf("Controllo gradienti.\n");
+#endif
 						if (tagCharLowerCase == 'c') {
 							gradientFG = FALSE; /* TODO: necessario? */
 							ncharsFG = 0;
@@ -157,7 +164,9 @@ int main(int argc, char *argv[]) {
 							if (iter[0] == '[' && iter[1] == '/' &&
 								(iter[2] == tagCharLowerCase || iter[2] == tagCharUpperCase)
 							) {
+#ifdef PLUS_DEBUG
 								printf("ho trovato un finale\n");
+#endif
 								if (iter[3] == '=') {
 									gradientTag = TRUE;
 									/*  */
@@ -165,8 +174,9 @@ int main(int argc, char *argv[]) {
 									char *finalColor = findColor(iter + 4);
 									if (!initialColor || !finalColor) break;
 
+#ifdef PLUS_DEBUG
 									printf("Colore iniziale: %s\n", initialColor);
-
+#endif
 									int j;
 									for (j = 0;j <= 2;j++) {
 										if (tagCharLowerCase == 'c') {
@@ -181,19 +191,25 @@ int main(int argc, char *argv[]) {
 										}
 									}
 
+#ifdef PLUS_DEBUG
 									printf("Colore finale: %s\n", finalColor);
+#endif
 									g_free(initialColor);
 									g_free(finalColor);
 
 									if (tagCharLowerCase == 'c') {
 										gradientFG = TRUE;
 										gradientIndexFG = 0;
+#ifdef PLUS_DEBUG
 										printf("numero caratteri: %i\n", ncharsFG);
+#endif
 									}
 									else {
 										gradientBG = TRUE;
 										gradientIndexBG = 0;
+#ifdef PLUS_DEBUG
 										printf("numero caratteri: %i\n", ncharsBG);
+#endif
 									}
 									// Calcolare il numero di caratteri effettivi (escludendo i tag),
 									// e suddividere il Delta R, G, B diviso il numero di caratteri,
@@ -202,10 +218,14 @@ int main(int argc, char *argv[]) {
 									// Subito PRIMA dell'ultimo carattere, mettere il colore finale.
 
 
+#ifdef PLUS_DEBUG
 									printf("gradiente\n");
+#endif
 								}
 								else {
+#ifdef PLUS_DEBUG
 									printf("non gradiente\n");
+#endif
 								}
 								break;
 							}
@@ -247,7 +267,9 @@ int main(int argc, char *argv[]) {
 					/* Tag convertito ed aggiunto solo se non sono in un gradiente.
 					 * Infatti in questo caso viene gestito dopo. */
 					if (!gradientTag) {
+#ifdef PLUS_DEBUG
 						printf("Provo il tag %s\n", g_strndup(p + 1, i - 1));
+#endif
 						replace = convert_tag(g_strndup(p + 1, i - 1));
 						if (replace) {
 							g_string_append(buf, replace);
@@ -287,8 +309,10 @@ int main(int argc, char *argv[]) {
 						if (ncharsFG > 1)
 							delta = deltaColorFG[j] * gradientIndexFG / (ncharsFG - 1);
 						color[j] = begColorFG[j] + delta;
+#ifdef PLUS_DEBUG
 //					printf("Deltacolor: %i; delta=%i; color[%i]=%i\n", deltaColor[j], delta, j, color[j]);
 //					printf("delta[%i] = %i\n", j, delta);
+#endif
 					}
 					fgAttribute = g_strdup_printf(" foreground=\"#%02x%02x%02x\"", color[0], color[1], color[2]);
 				}
@@ -300,13 +324,17 @@ int main(int argc, char *argv[]) {
 						if (ncharsBG > 1)
 							delta = deltaColorBG[j] * gradientIndexBG / (ncharsBG - 1);
 						color[j] = begColorBG[j] + delta;
+#ifdef PLUS_DEBUG
 //					printf("Deltacolor: %i; delta=%i; color[%i]=%i\n", deltaColor[j], delta, j, color[j]);
 //					printf("delta[%i] = %i\n", j, delta);
+#endif
 					}
 					bgAttribute = g_strdup_printf(" background=\"#%02x%02x%02x\"", color[0], color[1], color[2]);
 				}
 				else bgAttribute = g_strdup("");
+#ifdef PLUS_DEBUG
 				// printf("%s\n", g_utf8_offset_to_pointer(p, 2));
+#endif
 
 				tag = g_strdup_printf("<span%s%s>%s</span>", fgAttribute, bgAttribute, thischar);
 
@@ -328,6 +356,9 @@ int main(int argc, char *argv[]) {
 	/* Finito, restituisco buf */
 	g_assert(g_utf8_validate(buf->str, -1, NULL));
 	/* TODO: return */
-	printf("Risultato finale: %s\n", buf->str);
+#ifdef PLUS_DEBUG
+	printf("Risultato finale: ");
+#endif
+	printf("%s\n", buf->str);
 }
 
