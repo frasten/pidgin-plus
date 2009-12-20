@@ -137,9 +137,15 @@ int main(int argc, char *argv[]) {
 						tagCharLowerCase = 'a';
 						tagCharUpperCase = 'A';
 					}
-					else {
-						// sarebbe carino fargli skippare la parte di controllo gradiente
+					else if (p[1] == 'b' || p[1] == 'B' || p[1] == 'i' || p[1] == 'I' ||
+						p[1] == 'u' || p[1] == 'U' || p[1] == 's' || p[1] == 'S') {
+						/* sarebbe carino fargli skippare la parte di controllo gradiente */
 					}
+					else {
+						insideTag = FALSE;
+						break;
+					}
+
 
 					if ((p[1] == tagCharLowerCase || p[1] == tagCharUpperCase) && p[2] == '=') {
 #ifdef PLUS_DEBUG

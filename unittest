@@ -23,6 +23,7 @@ $patterns = array(
 "[c=1]ab[/c=2](*)" => '<span foreground="#000000">a</span><span foreground="#00007D">b</span>(*)',
 "[c=1]ab[/c=2]aaaaaa" => '<span foreground="#000000">a</span><span foreground="#00007D">b</span>aaaaaa',
 "[c=1][a=2]a[/a=0][/c=0]bcde" => '<span foreground="#000000" background="#00007d">a</span>bcde',
+"[c=1]a[Vhêmt]b[/c=2]" => '',
 );
 // <span foreground="#000000">a</span><span foreground="#00007d">b</span><span foreground="#0000fa">(</span><span foreground="#0000177">*</span><span foreground="#00001f4">)</span>
 
