@@ -370,6 +370,8 @@ static char *plus_nick_changed_cb(PurpleBuddy *buddy)
 					g_free(tag);
 					if (gradientFG) gradientIndexFG++;
 					if (gradientBG) gradientIndexBG++;
+					if (gradientIndexFG >= ncharsFG) gradientFG = FALSE;
+					if (gradientIndexBG >= ncharsBG) gradientBG = FALSE;
 				}
 				else {
 					/* Carattere normale, senza essere in un gradiente */
