@@ -59,15 +59,14 @@ const char * colorCodes[] = {
 
 /* Finds the color associated to a color code, and also reads colors in
  * #RRGGBB format. */
-static char *findColor(char *str) {
+static char *findColor(const char *str) {
 	unsigned int index;
-	char *p = str;
 	const char *color = NULL;
-	if (*p == '#') {
-		color = (p+1);
+	if (*str == '#') {
+		color = (str + 1);
 	}
 	else {
-		index = atoi(p);
+		index = atoi(str);
 		if (index >= sizeof(colorCodes) / sizeof(colorCodes[0]))
 			return NULL;
 		color = colorCodes[index];
@@ -80,7 +79,7 @@ static char *findColor(char *str) {
  * tag must not contains trailing [ and ] */
 static char *convert_tag(const char *ptag)
 {
-	char *p = (char *)ptag;
+	const char *p = ptag;
 	char *color = NULL;
 	const char *pretag = NULL;
 	if(*p == '/') p++;
