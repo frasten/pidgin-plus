@@ -27,7 +27,7 @@ $patterns = array(
 "[c=1]a[Vhêmt]b[/c=2]" => '<span foreground="#000000">a</span><span foreground="#00000f">[</span><span foreground="#00001f">V</span><span foreground="#00002e">h</span><span foreground="#00003e">ê</span><span foreground="#00004e">m</span><span foreground="#00005d">t</span><span foreground="#00006d">]</span><span foreground="#00007d">b</span>',
 "[c=1][z][/c=0]" => '<span foreground="#000000">[</span><span foreground="#7f7f7f">z</span><span foreground="#ffffff">]</span>',
 );
-// <span foreground="#000000">a</span><span foreground="#00007d">b</span><span foreground="#0000fa">(</span><span foreground="#0000177">*</span><span foreground="#00001f4">)</span>
+
 
 $counter = 1;
 $num_errors = 0;
