@@ -23,12 +23,16 @@ $patterns = array(
 
 
 for ($i = 0; $i < sizeof($patterns); $i++) {
+	echo "Testing pattern " . ($i+1) . "... ";
 	test($patterns[$i]);
+	echo "ok.\n";
 }
 
 
 function test($pattern) {
-	echo execute(COMMAND . ' ' . $pattern);
+	$pattern = str_replace('"', '\"', $pattern);
+	$pattern = str_replace('`', '\`', $pattern);
+	execute(COMMAND . " \"$pattern\"");
 }
 
 function execute($command, $keep_newlines = false) {
@@ -47,7 +51,7 @@ function check_command_file() {
 		exit;
 	}
 	else {
-		echo "ok.\n";
+		echo "ok.\n\n";
 	}
 }
 ?>
