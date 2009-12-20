@@ -81,7 +81,8 @@ static char *findColor(char *str) {
 static char *convert_tag(const char *ptag)
 {
 	char *p = (char *)ptag;
-	char *color = NULL,*pretag = NULL;
+	char *color = NULL;
+	const char *pretag = NULL;
 	if(*p == '/') p++;
 	if(*p == 'b' || *p == 'B' || *p == 'i' || *p == 'I' || *p == 'u' || *p == 'U' || *p == 's' || *p == 'S')
 	{
