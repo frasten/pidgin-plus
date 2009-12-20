@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
 					/* Controllo gradiente */
 
 					/* Try to unificate c/a*/
-					char tagCharLowerCase, tagCharUpperCase;
+					char tagCharLowerCase = 0, tagCharUpperCase = 0;
 					if (p[1] == 'c' || p[1] == 'C') {
 						tagCharLowerCase = 'c';
 						tagCharUpperCase = 'C';
