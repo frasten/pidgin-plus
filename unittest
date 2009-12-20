@@ -1,0 +1,52 @@
+#!/usr/bin/php
+<?php
+define('COMMAND', './test/test.o');
+
+check_command_file();
+
+$patterns = array(
+"[i][c=29][c=28][c=11][c=48][c=47][i](L)[c=6][c=9][c=13][c=30]S[/c]3[/c]R[/c]3[/c][/i]N[/c]3[/c]L[/c]L[/c]A[/c][/i]",
+"[c=1][b](¯`·._.·[♫_LUKE_♫]·._.·´¯)[/b][/c=9]",
+"[c=#FF0080][b]    .:｡✿*ﾟѕιмσиα.:｡✿ﾟ[/b][/c]",
+"[c=#FA0A64]Ale [/c]",
+"[b][a=1][c=9]UnO.Ke.Si.KiAmA.[/c=2]AleX[/a=63][/b]",
+"[c=9][a=1][b][i]-LuKe-[/i][/b][/a][/c]",
+"[c=46][a=1] ♥---==-♥°° ♥††♠Silvia♠††♥°°♥-=...[/a=46][/c=1]",
+"[c=7][b]©ίρο[/b][/c=45]",
+"[c=1][b][u]..:: *FùMiTsUki* ::.[/u][/b][/c=14]",
+"[c=9]prova <3[/c=2]",
+"[c=0]<>ciao & \" ' ( asd )[/c=1]",
+"[c=5][b][i]ReD - 20[/c][/b][/i]  (B) @ WORK| www.myspace.com/masks_Insomnia  x Foto",
+"(*)[b][c=#000066] frittomisto84 [/c=45][/b](*)",
+"[Vhêmt]",
+);
+
+
+for ($i = 0; $i < sizeof($patterns); $i++) {
+	test($patterns[$i]);
+}
+
+
+function test($pattern) {
+	echo execute(COMMAND . ' ' . $pattern);
+}
+
+function execute($command) {
+	$output = `$command`;
+	return preg_replace("/\n/", '', $output);
+}
+
+function check_command_file() {
+	if (!is_file(COMMAND)) {
+		echo "Missing command file. Try to compile... ";
+		@execute('cd ' . dirname(COMMAND) . ';make');
+		if (!is_file(COMMAND)) {
+			echo 'error.\n';
+			exit;
+		}
+		else {
+			echo "ok.\n";
+		}
+	}
+}
+?>
