@@ -1,3 +1,7 @@
+v0.2.1 - (12/20/2009)
+  * Fixed issues with patterns containing square braces.
+  * Fixed issues with 2 gradients ending in different places.
+
 v0.2.0 - (12/14/2009)
   * Added support for utf-8 characters. Now almost every nick should be
     colorized.
