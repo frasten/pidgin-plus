@@ -5,7 +5,8 @@ if [ "$1" = "clean" ]; then
 	fi
 	rm -rf INSTALL *.in *.la *.lo *~ aclocal.m4 autom4te.cache/ config.guess \
 		config.h config.log config.status config.sub configure depcomp \
-		install-sh libtool ltmain.sh missing .deps .libs stamp-h1
+		install-sh libtool ltmain.sh missing .deps .libs stamp-h1 \
+		plus/Makefile.in
 	exit
 fi
 
