@@ -1,8 +1,13 @@
 * Add support for gradient colors - DONE!!!
 * Try to enable the colored nick everywhere in Pidgin
+* Riuscire a far integrare nel trunk di Pidgin la patch, in modo da
+  garantire una miglior diffusione del plugin, anche agli utenti Win
+  (che dovrebbero compilarsi pidgin patchato).
 
 
 Known Issues with these patterns:
 [c=1]a[ss[u]dasd[/c]
 [c=1]a[bc[/c] (si incasina.. beh, e' malformata forte...)
 [c=5][b][i]ReD - 20[/c][/b][/i]  (B) @ WORK| www.myspace.com/masks_Insomnia  x Foto
+(8)·#·$#FF0000»·@·$#0000FFJ·$#000000oan·$#FF0000·@«·$#0000FF
+[b][c=1]◊[/c][/b] [b][c=1]Gιυs[/c][/b][b][c=4]Ә[/c][/b][b][c=1]ρρ[/c][/b][b][c=4]Ә◊[/b][/c]
