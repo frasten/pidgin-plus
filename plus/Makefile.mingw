@@ -5,7 +5,7 @@
 # Taken from the ticker plugin.
 #
 
-PLUS_VERSION := 0.2.1
+PLUS_VERSION := $(shell grep AC_INIT ../configure.ac | cut -d',' -f2 | sed -e "s/[^0-9.~-]//g")
 
 PIDGIN_TREE_TOP := ../../../..
 include $(PIDGIN_TREE_TOP)/libpurple/win32/global.mak
