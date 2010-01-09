@@ -1,7 +1,7 @@
 /*
  * Plus Purple plugin - Color tags by the Plus! Messenger for Windows
  * Copyright (C) 2008-2009 Daniele Ricci <daniele.athome@gmail.com>
- * Copyright (C) 2009 Andrea Piccinelli <frasten@gmail.com>
+ * Copyright (C) 2009-2010 Andrea Piccinelli <frasten@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -515,7 +515,7 @@ static PurplePluginInfo info =
 	PLUS_VERSION,										/**< version		*/
 	"Support for Plus! color tags.",				/**  summary		*/
 	"Parses server aliases for Plus! Live Messenger color tags.\nParsing can be deactivated on a per-nick basis.",		/**  description	*/
-	"Daniele Ricci <daniele.athome@gmail.com>",			/**< author			*/
+	"Andrea Piccinelli <frasten@gmail.com>",			/**< author			*/
 	NULL,										/**< homepage		*/
 
 	plugin_load,									/**< load			*/
