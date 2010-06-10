@@ -1,8 +1,4 @@
-* Add support for gradient colors - DONE!!!
 * Try to enable the colored nick everywhere in Pidgin
-* Riuscire a far integrare nel trunk di Pidgin la patch, in modo da
-  garantire una miglior diffusione del plugin, anche agli utenti Win
-  (che dovrebbero compilarsi pidgin patchato).
 
 
 Known Issues with these patterns:
